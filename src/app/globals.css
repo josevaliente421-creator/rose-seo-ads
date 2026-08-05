@@ -18,7 +18,7 @@
   --color-brand-soft-2: var(--brand-soft-2);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-satoshi), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Satoshi", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --shadow-soft: 0 1px 2px rgba(17, 17, 17, 0.04), 0 8px 24px rgba(17, 17, 17, 0.06);
