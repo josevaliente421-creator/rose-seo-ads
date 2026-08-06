@@ -210,3 +210,22 @@
     animation: none;
   }
 }
+
+/* ── Demos de plantillas ─────────────────────────────── */
+
+.demo-lex {
+  --demo-ink: #0b0608;
+  --demo-ink-2: #170a11;
+  --demo-burgundy: #4a1025;
+  --demo-burgundy-deep: #2a0815;
+  --demo-gold: #c9a86a;
+  --demo-gold-bright: #e3c890;
+  --demo-paper: #f6f1ea;
+
+  background-color: var(--demo-ink);
+  color: #f6f1ea;
+}
+
+.demo-lex .font-demo-serif {
+  font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
+}

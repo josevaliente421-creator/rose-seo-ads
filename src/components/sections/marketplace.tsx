@@ -91,13 +91,15 @@ function FeaturedTemplate({ template }: { template: Template }) {
               <ShoppingCart className="size-4" aria-hidden />
               Comprar
             </a>
-            <a
-              href="#contacto"
-              className="inline-flex h-12 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur transition-all hover:bg-white/20"
-            >
-              <Play className="size-4" aria-hidden />
-              Ver demo
-            </a>
+            {template.demo ? (
+              <a
+                href={template.demo}
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[15px] font-medium text-white backdrop-blur transition-all hover:bg-white/20"
+              >
+                <Play className="size-4" aria-hidden />
+                Ver demo
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
@@ -154,13 +156,15 @@ function TemplateRow({ template }: { template: Template }) {
           ${template.price}
           <span className="ml-1 text-xs font-medium text-muted-foreground">USD</span>
         </p>
-        <a
-          href="#contacto"
-          aria-label={`Ver demo de ${template.name}`}
-          className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:border-brand-soft-2 hover:bg-brand-soft hover:text-brand"
-        >
-          <Play className="size-3.5" aria-hidden />
-        </a>
+        {template.demo ? (
+          <a
+            href={template.demo}
+            aria-label={`Ver demo de ${template.name}`}
+            className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-all hover:border-brand-soft-2 hover:bg-brand-soft hover:text-brand"
+          >
+            <Play className="size-3.5" aria-hidden />
+          </a>
+        ) : null}
         <a
           href="#contacto"
           aria-label={`Comprar ${template.name}`}

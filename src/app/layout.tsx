@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Navbar } from "@/components/nav/navbar";
-import { Footer } from "@/components/sections/footer";
+import { SiteShell } from "@/components/site-shell";
 import { site } from "@/lib/site";
 import { faqs } from "@/lib/data";
 
@@ -138,9 +137,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-full flex-col">
         <Providers>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SiteShell>{children}</SiteShell>
         </Providers>
       </body>
     </html>

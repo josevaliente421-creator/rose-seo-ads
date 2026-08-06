@@ -132,6 +132,7 @@ export type Template = {
   gradient: string;
   accent: string;
   image?: string;
+  demo?: string;
   highlight?: boolean;
 };
 
@@ -158,6 +159,7 @@ export const templates: Template[] = [
     gradient: "from-[#4A1025] via-[#7A1F3D] to-[#B05273]",
     accent: "bg-[#7A1F3D]",
     image: "/lex.png",
+    demo: "/demo/lex",
   },
   {
     id: "vita",
