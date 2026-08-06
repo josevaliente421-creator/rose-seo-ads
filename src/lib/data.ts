@@ -131,6 +131,7 @@ export type Template = {
   seo: string;
   gradient: string;
   accent: string;
+  image?: string;
   highlight?: boolean;
 };
 
@@ -156,6 +157,7 @@ export const templates: Template[] = [
     seo: "SEO local",
     gradient: "from-[#4A1025] via-[#7A1F3D] to-[#B05273]",
     accent: "bg-[#7A1F3D]",
+    image: "/lex.png",
   },
   {
     id: "vita",
@@ -167,6 +169,7 @@ export const templates: Template[] = [
     seo: "Reservas + SEO",
     gradient: "from-[#0F3D3E] via-[#146C6A] to-[#4FA8A4]",
     accent: "bg-[#146C6A]",
+    image: "/vita.png",
   },
   {
     id: "fuego",
@@ -178,6 +181,7 @@ export const templates: Template[] = [
     seo: "Menú digital",
     gradient: "from-[#4A1A0A] via-[#B45309] to-[#E8A35C]",
     accent: "bg-[#B45309]",
+    image: "/fuego.png",
     highlight: true,
   },
   {
@@ -190,6 +194,7 @@ export const templates: Template[] = [
     seo: "Catálogo + leads",
     gradient: "from-[#1E2A5A] via-[#3B4C9A] to-[#7C8FE0]",
     accent: "bg-[#3B4C9A]",
+    image: "/vista.png",
   },
   {
     id: "cimento",
@@ -201,6 +206,7 @@ export const templates: Template[] = [
     seo: "Proyectos + SEO",
     gradient: "from-[#292524] via-[#57534E] to-[#A8A29E]",
     accent: "bg-[#57534E]",
+    image: "/cimiento.png",
   },
   {
     id: "aura",

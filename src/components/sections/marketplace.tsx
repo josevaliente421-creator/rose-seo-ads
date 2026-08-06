@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ShoppingCart, Play, ArrowDown } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -25,7 +26,19 @@ function Cover({
         className,
       )}
     >
-      <div className="bg-noise absolute inset-0 opacity-20" />
+      {template.image ? (
+        <div className="absolute inset-0">
+          <Image
+            src={template.image}
+            alt=""
+            fill
+            sizes="(max-width: 1024px) 92vw, 640px"
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+        </div>
+      ) : (
+        <div className="bg-noise absolute inset-0 opacity-20" />
+      )}
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />
     </div>
   );
@@ -109,9 +122,19 @@ function TemplateRow({ template }: { template: Template }) {
         )}
         aria-hidden
       >
-        <span className="font-display text-lg font-bold text-white/90 drop-shadow">
-          {template.name[0]}
-        </span>
+        {template.image ? (
+          <Image
+            src={template.image}
+            alt=""
+            fill
+            sizes="96px"
+            className="object-cover object-top"
+          />
+        ) : (
+          <span className="font-display text-lg font-bold text-white/90 drop-shadow">
+            {template.name[0]}
+          </span>
+        )}
       </div>
       <div className="min-w-0">
         <h3 className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
