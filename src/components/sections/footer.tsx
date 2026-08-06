@@ -1,4 +1,4 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { RoseLogo } from "@/components/ui/logo";
 import { InstagramIcon, FacebookIcon, LinkedinIcon } from "@/components/ui/social-icons";
@@ -27,10 +27,10 @@ const footerNav = [
 ] as const;
 
 const socials = [
-  { label: "Instagram", href: site.social.instagram, icon: InstagramIcon },
   { label: "Facebook", href: site.social.facebook, icon: FacebookIcon },
+  { label: "Instagram", href: site.social.instagram, icon: InstagramIcon },
   { label: "LinkedIn", href: site.social.linkedin, icon: LinkedinIcon },
-] as const;
+].filter((s) => s.href) as { label: string; href: string; icon: (props: { className?: string }) => React.ReactElement }[];
 
 export function Footer() {
   return (
@@ -84,6 +84,15 @@ export function Footer() {
               Contacto
             </h3>
             <ul className="mt-5 space-y-3 text-[15px]">
+              <li>
+                <a
+                  href={site.phoneHref}
+                  className="inline-flex items-center gap-2.5 text-foreground/80 transition-colors hover:text-brand"
+                >
+                  <Phone className="size-4 text-brand" aria-hidden />
+                  {site.phone}
+                </a>
+              </li>
               <li>
                 <a
                   href={`mailto:${site.email}`}

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "agencia web premium",
     "SEO",
     "Google Ads",
-    "diseño web México",
+    "diseño web Chile",
     "web para negocios",
   ],
   authors: [{ name: site.name, url: site.url }],
@@ -99,7 +99,7 @@ const jsonLd = {
       "@id": `${site.url}/#service`,
       serviceType: "Diseño y desarrollo de sitios web premium",
       provider: { "@id": `${site.url}/#organization` },
-      areaServed: "México",
+      areaServed: "Chile",
       offers: {
         "@type": "Offer",
         description: "Sitio web profesional entregado en 7 días",

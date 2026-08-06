@@ -4,16 +4,18 @@ export const site = {
   tagline: "Tu negocio online listo en 7 días",
   description:
     "Agencia premium de diseño y desarrollo web. Sitios web profesionales, optimizados para convertir y entregados en solo 7 días. Para negocios que merecen verse tan bien como lo que hacen.",
-  url: "https://rose-seo-ads.com",
-  email: "hola@roseseoads.com",
-  whatsapp: "https://wa.me/5200000000000",
+  url: "https://rose-seo-ads.vercel.app",
+  email: "josevaliente421@gmail.com",
+  phone: "+56 9 2730 3676",
+  phoneHref: "tel:+56927303676",
+  whatsapp: "https://wa.me/56927303676",
   social: {
-    instagram: "https://instagram.com/roseseoads",
-    facebook: "https://facebook.com/roseseoads",
-    linkedin: "https://linkedin.com/company/roseseoads",
+    instagram: "",
+    facebook: "https://www.facebook.com/profile.php?id=61592508226055",
+    linkedin: "",
   },
   language: "es",
-  locale: "es_MX",
+  locale: "es_CL",
 } as const;
 
 export const CONTACT_ANCHOR = "#contacto";
