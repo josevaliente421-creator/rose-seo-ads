@@ -238,12 +238,14 @@
 }
 
 .demo-fuego {
-  --demo-ink: #120b07;
-  --demo-ink-2: #1c110a;
-  --demo-accent-deep: #331a08;
-  --demo-gold: #e8a35c;
-  --demo-gold-bright: #f4c98e;
-  --demo-paper: #f7f0e6;
+  --demo-ink: #080807;
+  --demo-ink-2: #0e0e0c;
+  --demo-ink-3: #151411;
+  --demo-accent-deep: #7a2118;
+  --demo-gold: #b99055;
+  --demo-gold-bright: #cfb088;
+  --demo-paper: #f4f0e8;
+  --demo-muted: #a9a39a;
 
   background-color: var(--demo-ink);
   color: var(--demo-paper);

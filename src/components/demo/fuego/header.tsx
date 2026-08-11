@@ -1,26 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const links = [
-  { label: "La mesa", href: "#servicios" },
-  { label: "La parrilla", href: "#especialidades" },
-  { label: "Una noche", href: "#dia" },
-  { label: "Equipo", href: "#equipo" },
-];
+import { nav } from "./content";
 
 export function FuegoHeader() {
-  const reduce = useReducedMotion();
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -38,31 +29,26 @@ export function FuegoHeader() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-white/[0.06] bg-[var(--demo-ink)]/80 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent",
+          ? "border-b border-white/[0.06] bg-[#080807]/80 backdrop-blur-xl"
+          : "border-b border-transparent bg-gradient-to-b from-black/70 to-transparent",
       )}
     >
-      <motion.span
-        aria-hidden
-        style={reduce ? undefined : { scaleX: progress }}
-        className="absolute inset-x-0 top-0 block h-[2px] origin-left bg-gradient-to-r from-[var(--demo-accent-deep)] via-[var(--demo-gold)] to-[var(--demo-gold-bright)]"
-      />
       <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between px-6 sm:px-10 lg:px-12">
-        <a href="#top" className="flex items-baseline gap-2" aria-label="VITA Clínica — inicio">
-          <span className="font-demo-serif text-2xl font-bold tracking-tight text-[var(--demo-gold)]">
-            VITA
+        <a href="#top" className="group flex items-baseline gap-2" aria-label="FUEGO — inicio">
+          <span className="font-demo-serif text-2xl font-bold tracking-tight text-[var(--demo-paper)] transition-colors group-hover:text-[var(--demo-gold)]">
+            FUEGO
           </span>
-          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-white/60">
-            Clínica
+          <span className="font-mono text-[9px] font-medium uppercase tracking-[0.3em] text-white/50">
+            {nav.brandSub}
           </span>
         </a>
 
         <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">
-          {links.map((link) => (
+          {nav.links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="group relative font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-white/65 transition-colors hover:text-white"
+              className="group relative font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-[var(--demo-paper)]"
             >
               {link.label}
               <span
@@ -75,9 +61,9 @@ export function FuegoHeader() {
 
         <div className="flex items-center gap-3">
           <a
-            href="#contacto"
-            className="hidden h-10 items-center rounded-full border border-[var(--demo-gold)]/40 px-5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--demo-gold)] transition-all hover:border-[var(--demo-gold)] hover:bg-[var(--demo-gold)]/10 sm:inline-flex"
-            data-cursor="agendar"
+            href="#reservas"
+            className="hidden h-10 items-center rounded-full border border-[var(--demo-gold)]/45 px-6 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--demo-gold)] transition-all hover:border-[var(--demo-gold)] hover:bg-[var(--demo-gold)]/10 sm:inline-flex"
+            data-cursor="reservar"
           >
             Reservar
           </a>
@@ -99,16 +85,16 @@ export function FuegoHeader() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-50 flex flex-col bg-[var(--demo-ink)]/95 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-50 flex flex-col bg-[#080807]/97 backdrop-blur-2xl lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Menú de navegación"
           >
             <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between px-6 sm:px-10">
               <span className="flex items-baseline gap-2">
-                <span className="font-demo-serif text-2xl font-bold text-[var(--demo-gold)]">VITA</span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
-                  Clínica
+                <span className="font-demo-serif text-2xl font-bold text-[var(--demo-paper)]">FUEGO</span>
+                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/50">
+                  {nav.brandSub}
                 </span>
               </span>
               <button
@@ -122,7 +108,7 @@ export function FuegoHeader() {
             </div>
 
             <nav aria-label="Menú móvil" className="flex flex-1 flex-col justify-center px-6 sm:px-10">
-              {links.map((link, i) => (
+              {nav.links.map((link, i) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
@@ -137,17 +123,20 @@ export function FuegoHeader() {
               ))}
             </nav>
 
-            <div className="px-6 pb-10 sm:px-10">
+            <div className="flex flex-col gap-3 px-6 pb-10 sm:px-10">
               <motion.a
-                href="#contacto"
+                href="#reservas"
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="flex h-13 w-full items-center justify-center rounded-full bg-[var(--demo-gold)] font-mono text-[12px] font-medium uppercase tracking-[0.18em] text-[#1a0b10]"
+                className="flex h-13 w-full items-center justify-center rounded-full bg-[var(--demo-gold)] font-mono text-[12px] font-medium uppercase tracking-[0.18em] text-[#1a140c]"
               >
-                Reservar
+                Reservar mesa
               </motion.a>
+              <p className="pt-1 text-center font-mono text-[9px] uppercase tracking-[0.24em] text-white/30">
+                Sitio demostrativo
+              </p>
             </div>
           </motion.div>
         ) : null}
