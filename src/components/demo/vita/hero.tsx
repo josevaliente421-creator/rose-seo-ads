@@ -10,9 +10,9 @@ import { FacadeScene } from "@/components/demo/scenes";
 import { CountUp } from "@/components/motion/count-up";
 
 const stats = [
-  { value: 900, prefix: "+", label: "casos asesorados" },
-  { value: 98, suffix: "%", label: "satisfacción de clientes" },
-  { value: 15, suffix: " años", label: "de experiencia" },
+  { value: 25000, prefix: "+", label: "pacientes atendidos" },
+  { value: 4.9, prefix: "", suffix: "/5", label: "evaluación promedio", decimals: 1 },
+  { value: 12, suffix: "", label: "especialidades clínicas" },
 ];
 
 function MaskedLine({
@@ -40,7 +40,7 @@ function MaskedLine({
   );
 }
 
-export function LexHero() {
+export function VitaHero() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -73,14 +73,14 @@ export function LexHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Eyebrow>Estudio jurídico · Derecho Corporativo</Eyebrow>
+            <Eyebrow>Clínica médica · Medicina preventiva</Eyebrow>
           </motion.div>
 
           <h1 className="mt-7 font-demo-serif text-[clamp(2.6rem,6vw,4.6rem)] font-semibold leading-[1.04] tracking-tight text-[var(--demo-paper)]">
-            <MaskedLine delay={0.15}>La tranquilidad legal</MaskedLine>
-            <MaskedLine delay={0.28}>comienza con una</MaskedLine>
+            <MaskedLine delay={0.15}>La salud que se</MaskedLine>
+            <MaskedLine delay={0.28}>ve en los resultados,</MaskedLine>
             <MaskedLine delay={0.41} className="text-[var(--demo-gold)]">
-              buena estrategia.
+              no en las esperas.
             </MaskedLine>
           </h1>
 
@@ -90,8 +90,8 @@ export function LexHero() {
             transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mt-7 max-w-xl text-lg leading-relaxed text-white/60"
           >
-            Asesoramos empresas, emprendedores y organizaciones con soluciones
-            jurídicas claras, rápidas y orientadas a resultados.
+            Chequeos preventivos, medicina familiar y especialidades con médicos
+            que te conocen, te escuchan y no te hacen esperar.
           </motion.p>
 
           <motion.div
@@ -101,11 +101,11 @@ export function LexHero() {
             className="mt-10 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row sm:items-center"
           >
             <DemoButton size="lg" href="#contacto" className="w-full sm:w-auto">
-              Agendar reunión
+              Agendar hora
               <ArrowRight className="size-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
             </DemoButton>
             <DemoButton size="lg" variant="outline" href="#servicios" className="w-full sm:w-auto">
-              Ver áreas de práctica
+              Ver especialidades
             </DemoButton>
           </motion.div>
 
@@ -119,7 +119,7 @@ export function LexHero() {
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
                 <dd className="font-demo-serif text-3xl font-semibold tracking-tight text-[var(--demo-paper)] sm:text-4xl">
-                  <CountUp to={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
+                  <CountUp to={stat.value} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals} />
                 </dd>
                 <dd className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
                   {stat.label}
@@ -136,17 +136,17 @@ export function LexHero() {
           className="relative hidden lg:block"
         >
           <motion.div style={{ y: sceneY }} className="relative">
-            <FacadeScene className="aspect-[4/5] w-full rounded-2xl" />
+            <FacadeScene tone="teal" className="aspect-[4/5] w-full rounded-2xl" />
             <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60 backdrop-blur">
               <span aria-hidden className="size-1.5 rounded-full bg-[var(--demo-gold)]" />
-              Av. Apoquindo 4800 · Santiago
+              Av. Isidora Goyenechea 3000 · Santiago
             </div>
           </motion.div>
         </motion.div>
       </DemoContainer>
 
       <div className="lg:hidden">
-        <FacadeScene className="mx-6 aspect-[4/3] rounded-2xl sm:mx-10" />
+        <FacadeScene tone="teal" className="mx-6 aspect-[4/3] rounded-2xl sm:mx-10" />
       </div>
 
       <motion.div

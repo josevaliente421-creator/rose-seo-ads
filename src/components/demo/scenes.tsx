@@ -1,5 +1,60 @@
 import { cn } from "@/lib/utils";
 
+export type SceneTone = "rose" | "teal" | "navy" | "stone" | "amber";
+
+const tones: Record<
+  SceneTone,
+  {
+    ink: string;
+    ink2: string;
+    deep: string;
+    accent: string;
+    gold: string;
+    goldBright: string;
+  }
+> = {
+  rose: {
+    ink: "#0b0608",
+    ink2: "#170a11",
+    deep: "#2a0815",
+    accent: "#4a1025",
+    gold: "#c9a86a",
+    goldBright: "#e3c890",
+  },
+  teal: {
+    ink: "#0b1211",
+    ink2: "#10211f",
+    deep: "#0c2b29",
+    accent: "#146c6a",
+    gold: "#c9a86a",
+    goldBright: "#e6d3a8",
+  },
+  navy: {
+    ink: "#070a14",
+    ink2: "#0e1426",
+    deep: "#141d3d",
+    accent: "#3b4c9a",
+    gold: "#c9a86a",
+    goldBright: "#e6d3a8",
+  },
+  stone: {
+    ink: "#0c0b0a",
+    ink2: "#171412",
+    deep: "#262220",
+    accent: "#57534e",
+    gold: "#c9a86a",
+    goldBright: "#e6d3a8",
+  },
+  amber: {
+    ink: "#120b07",
+    ink2: "#1c110a",
+    deep: "#331a08",
+    accent: "#b45309",
+    gold: "#e8a35c",
+    goldBright: "#f4c98e",
+  },
+};
+
 export function SceneFrame({
   className,
   children,
@@ -27,7 +82,14 @@ export function SceneFrame({
   );
 }
 
-export function FacadeScene({ className }: { className?: string }) {
+export function FacadeScene({
+  tone = "rose",
+  className,
+}: {
+  tone?: SceneTone;
+  className?: string;
+}) {
+  const t = tones[tone];
   const cols = 8;
   const rows = 15;
   const windows = [];
@@ -48,7 +110,7 @@ export function FacadeScene({ className }: { className?: string }) {
           width={w}
           height={h}
           rx={2}
-          fill={hot ? "#e3c890" : "#c9a86a"}
+          fill={hot ? t.goldBright : t.gold}
           fillOpacity={opacity}
         />,
       );
@@ -63,34 +125,34 @@ export function FacadeScene({ className }: { className?: string }) {
         className="absolute inset-0 h-full w-full"
       >
         <defs>
-          <linearGradient id="facade-bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#170a11" />
-            <stop offset="0.55" stopColor="#2a0815" />
-            <stop offset="1" stopColor="#0b0608" />
+          <linearGradient id={`facade-bg-${tone}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor={t.ink2} />
+            <stop offset="0.55" stopColor={t.deep} />
+            <stop offset="1" stopColor={t.ink} />
           </linearGradient>
-          <linearGradient id="facade-shaft" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={`facade-shaft-${tone}`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor="#fff" stopOpacity="0.35" />
-            <stop offset="0.45" stopColor="#e3c890" stopOpacity="0.1" />
+            <stop offset="0.45" stopColor={t.goldBright} stopOpacity="0.1" />
             <stop offset="1" stopColor="#fff" stopOpacity="0" />
           </linearGradient>
-          <radialGradient id="facade-vignette" cx="0.5" cy="0.4" r="0.85">
+          <radialGradient id={`facade-vig-${tone}`} cx="0.5" cy="0.4" r="0.85">
             <stop offset="0.55" stopColor="#000" stopOpacity="0" />
             <stop offset="1" stopColor="#000" stopOpacity="0.55" />
           </radialGradient>
-          <linearGradient id="facade-entrance" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#e3c890" stopOpacity="0.4" />
-            <stop offset="1" stopColor="#c9a86a" stopOpacity="0.08" />
+          <linearGradient id={`facade-ent-${tone}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={t.goldBright} stopOpacity="0.4" />
+            <stop offset="1" stopColor={t.gold} stopOpacity="0.08" />
           </linearGradient>
         </defs>
 
-        <rect width="800" height="1000" fill="url(#facade-bg)" />
+        <rect width="800" height="1000" fill={`url(#facade-bg-${tone})`} />
 
         <rect
           x="40"
           y="0"
           width="620"
           height="1000"
-          fill="#0d0709"
+          fill={t.ink}
           opacity="0.6"
         />
         <rect
@@ -99,7 +161,8 @@ export function FacadeScene({ className }: { className?: string }) {
           width="620"
           height="1000"
           fill="none"
-          stroke="rgba(201,168,106,0.14)"
+          stroke={t.gold}
+          strokeOpacity="0.14"
           strokeWidth="1.5"
         />
 
@@ -119,7 +182,7 @@ export function FacadeScene({ className }: { className?: string }) {
 
         <polygon
           points="0,0 320,0 760,1000 0,1000"
-          fill="url(#facade-shaft)"
+          fill={`url(#facade-shaft-${tone})`}
           opacity="0.5"
         />
 
@@ -128,24 +191,32 @@ export function FacadeScene({ className }: { className?: string }) {
           y="0"
           width="100"
           height="1000"
-          fill="url(#facade-entrance)"
+          fill={`url(#facade-ent-${tone})`}
         />
         <line
           x1="700"
           y1="0"
           x2="700"
           y2="1000"
-          stroke="rgba(227,200,144,0.35)"
+          stroke={t.goldBright}
+          strokeOpacity="0.35"
           strokeWidth="1.5"
         />
 
-        <rect width="800" height="1000" fill="url(#facade-vignette)" />
+        <rect width="800" height="1000" fill={`url(#facade-vig-${tone})`} />
       </svg>
     </SceneFrame>
   );
 }
 
-export function ArchScene({ className }: { className?: string }) {
+export function ArchScene({
+  tone = "rose",
+  className,
+}: {
+  tone?: SceneTone;
+  className?: string;
+}) {
+  const t = tones[tone];
   const arches = [];
   for (let i = 0; i < 5; i++) {
     const x0 = 20 + i * 160;
@@ -155,8 +226,9 @@ export function ArchScene({ className }: { className?: string }) {
       <g key={`a-${i}`}>
         <path
           d={`M ${x0} 520 V 190 A ${w / 2} ${w / 2} 0 0 1 ${x0 + w} 190 V 520`}
-          fill="url(#arch-inner)"
-          stroke="rgba(201,168,106,0.28)"
+          fill={`url(#arch-inner-${tone})`}
+          stroke={t.gold}
+          strokeOpacity="0.28"
           strokeWidth="1.5"
         />
         <line
@@ -171,7 +243,8 @@ export function ArchScene({ className }: { className?: string }) {
           cy="520"
           rx="46"
           ry="10"
-          fill="rgba(227,200,144,0.05)"
+          fill={t.goldBright}
+          fillOpacity="0.05"
         />
       </g>,
     );
@@ -185,35 +258,43 @@ export function ArchScene({ className }: { className?: string }) {
         className="absolute inset-0 h-full w-full"
       >
         <defs>
-          <linearGradient id="arch-bg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#170a11" />
-            <stop offset="1" stopColor="#0b0608" />
+          <linearGradient id={`arch-bg-${tone}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={t.ink2} />
+            <stop offset="1" stopColor={t.ink} />
           </linearGradient>
-          <linearGradient id="arch-inner" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#4a1025" stopOpacity="0.85" />
-            <stop offset="1" stopColor="#170a11" stopOpacity="0.3" />
+          <linearGradient id={`arch-inner-${tone}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={t.accent} stopOpacity="0.85" />
+            <stop offset="1" stopColor={t.ink2} stopOpacity="0.3" />
           </linearGradient>
-          <radialGradient id="arch-glow" cx="0.5" cy="0.35" r="0.7">
-            <stop offset="0" stopColor="#c9a86a" stopOpacity="0.1" />
-            <stop offset="1" stopColor="#c9a86a" stopOpacity="0" />
+          <radialGradient id={`arch-glow-${tone}`} cx="0.5" cy="0.35" r="0.7">
+            <stop offset="0" stopColor={t.gold} stopOpacity="0.1" />
+            <stop offset="1" stopColor={t.gold} stopOpacity="0" />
           </radialGradient>
         </defs>
-        <rect width="800" height="520" fill="url(#arch-bg)" />
-        <rect width="800" height="520" fill="url(#arch-glow)" />
+        <rect width="800" height="520" fill={`url(#arch-bg-${tone})`} />
+        <rect width="800" height="520" fill={`url(#arch-glow-${tone})`} />
         {arches}
         <line
           x1="0"
           y1="520"
           x2="800"
           y2="520"
-          stroke="rgba(201,168,106,0.12)"
+          stroke={t.gold}
+          strokeOpacity="0.12"
         />
       </svg>
     </SceneFrame>
   );
 }
 
-export function EditorialTexture({ className }: { className?: string }) {
+export function EditorialTexture({
+  tone = "rose",
+  className,
+}: {
+  tone?: SceneTone;
+  className?: string;
+}) {
+  const t = tones[tone];
   return (
     <SceneFrame className={className}>
       <svg
@@ -223,18 +304,18 @@ export function EditorialTexture({ className }: { className?: string }) {
         className="absolute inset-0 h-full w-full"
       >
         <defs>
-          <linearGradient id="tex-bg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#2a0815" />
-            <stop offset="0.6" stopColor="#170a11" />
-            <stop offset="1" stopColor="#0b0608" />
+          <linearGradient id={`tex-bg-${tone}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={t.deep} />
+            <stop offset="0.6" stopColor={t.ink2} />
+            <stop offset="1" stopColor={t.ink} />
           </linearGradient>
-          <radialGradient id="tex-glow" cx="0.5" cy="0.25" r="0.65">
-            <stop offset="0" stopColor="#e3c890" stopOpacity="0.16" />
-            <stop offset="1" stopColor="#e3c890" stopOpacity="0" />
+          <radialGradient id={`tex-glow-${tone}`} cx="0.5" cy="0.25" r="0.65">
+            <stop offset="0" stopColor={t.goldBright} stopOpacity="0.16" />
+            <stop offset="1" stopColor={t.goldBright} stopOpacity="0" />
           </radialGradient>
         </defs>
-        <rect width="800" height="800" fill="url(#tex-bg)" />
-        <rect width="800" height="800" fill="url(#tex-glow)" />
+        <rect width="800" height="800" fill={`url(#tex-bg-${tone})`} />
+        <rect width="800" height="800" fill={`url(#tex-glow-${tone})`} />
         {Array.from({ length: 9 }, (_, i) => (
           <line
             key={`h-${i}`}
@@ -242,7 +323,8 @@ export function EditorialTexture({ className }: { className?: string }) {
             y1={90 + i * 80}
             x2="800"
             y2={90 + i * 80}
-            stroke="rgba(201,168,106,0.05)"
+            stroke={t.gold}
+            strokeOpacity="0.05"
             strokeWidth="1"
           />
         ))}
@@ -253,7 +335,8 @@ export function EditorialTexture({ className }: { className?: string }) {
             y1="0"
             x2={90 + i * 80}
             y2="800"
-            stroke="rgba(201,168,106,0.05)"
+            stroke={t.gold}
+            strokeOpacity="0.05"
             strokeWidth="1"
           />
         ))}
@@ -262,7 +345,8 @@ export function EditorialTexture({ className }: { className?: string }) {
           cy="300"
           r="220"
           fill="none"
-          stroke="rgba(201,168,106,0.12)"
+          stroke={t.gold}
+          strokeOpacity="0.12"
           strokeWidth="1"
         />
         <circle
@@ -270,7 +354,8 @@ export function EditorialTexture({ className }: { className?: string }) {
           cy="300"
           r="330"
           fill="none"
-          stroke="rgba(201,168,106,0.07)"
+          stroke={t.gold}
+          strokeOpacity="0.07"
           strokeWidth="1"
         />
       </svg>

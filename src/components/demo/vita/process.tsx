@@ -6,7 +6,7 @@ import { DemoContainer } from "@/components/demo/container";
 import { Reveal } from "@/components/motion/reveal";
 import { processSteps } from "./content";
 
-export function LexProcess() {
+export function VitaProcess() {
   const reduce = useReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({

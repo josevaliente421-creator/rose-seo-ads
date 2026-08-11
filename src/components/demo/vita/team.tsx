@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/demo/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { team } from "./content";
 
-export function LexTeam() {
+export function VitaTeam() {
   return (
     <section id="equipo" className="relative scroll-mt-24 py-24 sm:py-32">
       <div
@@ -20,15 +20,15 @@ export function LexTeam() {
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--demo-paper)] sm:text-5xl">
-                Las personas detrás de{" "}
-                <span className="italic text-[var(--demo-gold)]">cada estrategia</span>
+                El equipo médico detrás de{" "}
+                <span className="italic text-[var(--demo-gold)]">cada consulta</span>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.2}>
             <p className="max-w-sm text-sm leading-relaxed text-white/45">
-              Un equipo pequeño a propósito: menos reuniones internas, más
-              respuestas para ti.
+              Médicos de dedicación exclusiva: los mismos especialistas que te
+              ven hoy te ven en seis meses.
             </p>
           </Reveal>
         </div>

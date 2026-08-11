@@ -7,10 +7,10 @@ import { EditorialTexture } from "@/components/demo/scenes";
 import { Reveal } from "@/components/motion/reveal";
 import { site } from "@/lib/site";
 
-export function LexCta() {
+export function VitaCta() {
   return (
     <section id="contacto" className="relative scroll-mt-24 overflow-hidden py-24 sm:py-32 lg:py-40">
-      <EditorialTexture className="absolute inset-0" />
+      <EditorialTexture tone="teal" className="absolute inset-0" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--demo-gold)]/40 to-transparent"
@@ -21,17 +21,17 @@ export function LexCta() {
           <div className="mx-auto max-w-3xl text-center">
             <p className="inline-flex items-center gap-2.5 rounded-full border border-[var(--demo-gold)]/30 bg-[var(--demo-gold)]/5 px-4 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.24em] text-[var(--demo-gold)]">
               <Sparkles className="size-3" aria-hidden />
-              Demo de plantilla · LEX Abogados
+              Demo de plantilla · VITA Clínica
             </p>
 
             <h2 className="mt-8 font-demo-serif text-4xl font-semibold leading-[1.06] tracking-tight text-[var(--demo-paper)] sm:text-5xl lg:text-6xl">
-              Una gran empresa merece una presencia digital{" "}
+              Una clínica moderna merece una presencia digital{" "}
               <span className="italic text-[var(--demo-gold)]">a la altura</span>.
             </h2>
 
             <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">
               Este sitio es una demostración creada por RoseSEO&Ads para mostrar
-              cómo transformamos empresas tradicionales en marcas digitales
+              cómo convertimos una clínica tradicional en una marca digital
               premium.
             </p>
 
@@ -46,7 +46,7 @@ export function LexCta() {
             </div>
 
             <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.24em] text-white/30">
-              Respuesta en menos de 24 horas
+              Agenda tu primera hora en menos de 24 horas
             </p>
           </div>
         </Reveal>

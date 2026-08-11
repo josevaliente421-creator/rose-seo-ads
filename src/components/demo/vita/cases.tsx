@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { CountUp } from "@/components/motion/count-up";
 import { cases } from "./content";
 
-export function LexCases() {
+export function VitaCases() {
   return (
     <section id="casos" className="relative scroll-mt-24 py-24 sm:py-32">
       <div
@@ -16,11 +16,11 @@ export function LexCases() {
       <DemoContainer>
         <div className="max-w-2xl">
           <Reveal>
-            <Eyebrow>Casos</Eyebrow>
+            <Eyebrow>Programas</Eyebrow>
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--demo-paper)] sm:text-5xl">
-              Resultados que se{" "}
+              Resultados clínicos que se{" "}
               <span className="italic text-[var(--demo-gold)]">explican solos</span>
             </h2>
           </Reveal>
@@ -55,7 +55,7 @@ export function LexCases() {
                     </div>
                     <div className="mt-6 border-t border-white/[0.08] pt-7">
                       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/40">
-                        Proceso
+                        Plan
                       </p>
                       <p className="mt-3 text-[15px] leading-relaxed text-white/60">
                         {item.process}

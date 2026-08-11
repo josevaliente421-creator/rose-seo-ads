@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/demo/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { specialties } from "./content";
 
-export function LexSpecialties() {
+export function VitaSpecialties() {
   return (
     <section id="especialidades" className="relative scroll-mt-24 py-24 sm:py-32">
       <div
@@ -20,15 +20,15 @@ export function LexSpecialties() {
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--demo-paper)] sm:text-5xl">
-                Sectores que hablamos{" "}
-                <span className="italic text-[var(--demo-gold)]">de memoria</span>
+Áreas clínicas que{" "}
+              <span className="italic text-[var(--demo-gold)]">dominamos</span>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.2}>
             <p className="max-w-sm text-sm leading-relaxed text-white/45">
-              Cada industria tiene sus reglas escritas y sus reglas no escritas.
-              Las conocemos ambas.
+              Cada especialidad cuenta con médicos dedicados, equipamiento
+              propio y tiempos de espera definidos.
             </p>
           </Reveal>
         </div>

@@ -6,7 +6,7 @@ import { DemoAccordion } from "@/components/demo/accordion";
 import { Reveal } from "@/components/motion/reveal";
 import { faqs } from "./content";
 
-export function LexFaq() {
+export function VitaFaq() {
   return (
     <section id="faq" className="relative scroll-mt-24 py-24 sm:py-32">
       <div
@@ -20,7 +20,7 @@ export function LexFaq() {
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--demo-paper)] sm:text-5xl">
-              Lo que todo cliente{" "}
+              Lo que todo paciente{" "}
               <span className="italic text-[var(--demo-gold)]">pregunta antes</span>
             </h2>
           </Reveal>

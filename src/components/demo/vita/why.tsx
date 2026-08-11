@@ -4,7 +4,7 @@ import { DemoContainer } from "@/components/demo/container";
 import { Reveal } from "@/components/motion/reveal";
 import { values } from "./content";
 
-export function LexWhy() {
+export function VitaWhy() {
   return (
     <section id="por-que" className="relative scroll-mt-24 bg-[var(--demo-paper)] py-24 text-[var(--demo-ink)] sm:py-32">
       <div
@@ -21,14 +21,15 @@ export function LexWhy() {
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl">
-              Los papeles importan.{" "}
-              <span className="italic text-[var(--demo-accent-deep)]">Tu negocio también.</span>
+              La salud importa.{" "}
+              <span className="italic text-[var(--demo-accent-deep)]">Tu tiempo también.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--demo-accent-deep)]/70 sm:text-lg">
-              No somos el estudio que te llama para cobrar. Somos el estudio que
-              te llama porque tu operación cambió — y ya deberías estar protegido.
+              No somos la clínica que atiende por números. Somos la clínica que
+              te conoce por nombre: consultas que parten a la hora, médicos que
+              escuchan y resultados que te explican, no que te envían a Google.
             </p>
           </Reveal>
         </div>

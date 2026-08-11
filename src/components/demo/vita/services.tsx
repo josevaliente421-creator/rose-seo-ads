@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/demo/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { services } from "./content";
 
-export function LexServices() {
+export function VitaServices() {
   return (
     <section id="servicios" className="relative scroll-mt-24 py-24 sm:py-32">
       <div
@@ -19,14 +19,14 @@ export function LexServices() {
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-6 font-demo-serif text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--demo-paper)] sm:text-5xl">
-              Una estrategia jurídica{" "}
-              <span className="italic text-[var(--demo-gold)]">integral</span>
+              Medicina que te{" "}
+              <span className="italic text-[var(--demo-gold)]">acompaña siempre</span>
             </h2>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-5 text-base leading-relaxed text-white/55 sm:text-lg">
-              Seis áreas que se conversan entre sí: lo que decide tu abogado
-              corporativo nunca contradice a tu abogado tributario.
+              Seis servicios integrados bajo una misma filosofía: evidencia,
+              tiempo de consulta y cero esperas innecesarias.
             </p>
           </Reveal>
         </div>

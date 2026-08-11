@@ -172,6 +172,7 @@ export const templates: Template[] = [
     gradient: "from-[#0F3D3E] via-[#146C6A] to-[#4FA8A4]",
     accent: "bg-[#146C6A]",
     image: "/vita.png",
+    demo: "/demo/vita",
   },
   {
     id: "fuego",
