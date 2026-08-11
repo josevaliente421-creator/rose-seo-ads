@@ -10,11 +10,16 @@ type DemoFaqItem = {
   a: string;
 };
 
-export function DemoAccordion({ items }: { items: DemoFaqItem[] }) {
+export function DemoAccordion({ items, tone = "dark" }: { items: DemoFaqItem[]; tone?: "dark" | "light" }) {
   const [open, setOpen] = React.useState<number | null>(0);
 
   return (
-    <div className="divide-y divide-white/10 border-y border-white/10">
+    <div
+      className={cn(
+        "divide-y border-y",
+        tone === "dark" ? "divide-white/10 border-white/10" : "divide-[var(--demo-ink)]/12 border-[var(--demo-ink)]/12",
+      )}
+    >
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
@@ -29,7 +34,11 @@ export function DemoAccordion({ items }: { items: DemoFaqItem[] }) {
               <span
                 className={cn(
                   "font-demo-serif text-xl font-semibold tracking-tight transition-colors duration-300 sm:text-2xl",
-                  isOpen ? "text-[var(--demo-gold)]" : "text-[#f6f1ea]",
+                  isOpen
+                    ? "text-[var(--demo-gold)]"
+                    : tone === "dark"
+                      ? "text-[#f6f1ea]"
+                      : "text-[var(--demo-ink)]",
                 )}
               >
                 {item.q}
@@ -39,7 +48,9 @@ export function DemoAccordion({ items }: { items: DemoFaqItem[] }) {
                   "flex size-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
                   isOpen
                     ? "rotate-180 border-[var(--demo-gold)] text-[var(--demo-gold)]"
-                    : "border-white/20 text-white/60 group-hover:border-white/40 group-hover:text-white",
+                    : tone === "dark"
+                      ? "border-white/20 text-white/60 group-hover:border-white/40 group-hover:text-white"
+                      : "border-[var(--demo-ink)]/20 text-[var(--demo-ink)]/60 group-hover:border-[var(--demo-ink)]/40 group-hover:text-[var(--demo-ink)]",
                 )}
                 aria-hidden
               >
@@ -60,7 +71,12 @@ export function DemoAccordion({ items }: { items: DemoFaqItem[] }) {
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="max-w-2xl pb-7 text-[15px] leading-relaxed text-white/65">
+                  <p
+                    className={cn(
+                      "max-w-2xl pb-7 text-[15px] leading-relaxed",
+                      tone === "dark" ? "text-white/65" : "text-[var(--demo-ink)]/65",
+                    )}
+                  >
                     {item.a}
                   </p>
                 </motion.div>

@@ -1,42 +1,89 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { DemoContainer } from "@/components/demo/container";
-import { Eyebrow } from "@/components/demo/eyebrow";
 import { DemoButton } from "@/components/demo/button";
-import { FacadeScene } from "@/components/demo/scenes";
-import { CountUp } from "@/components/motion/count-up";
 
-const stats = [
-  { value: 25000, prefix: "+", label: "pacientes atendidos" },
-  { value: 4.9, prefix: "", suffix: "/5", label: "evaluación promedio", decimals: 1 },
-  { value: 12, suffix: "", label: "especialidades clínicas" },
-];
+const copy = "La salud que te escucha.";
 
-function MaskedLine({
-  children,
+function Words({
+  text,
   delay,
-  className,
 }: {
-  children: React.ReactNode;
+  text: string;
   delay: number;
-  className?: string;
 }) {
+  const words = text.split(" ");
   return (
-    <span className={className}>
-      <span className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
-        <motion.span
-          initial={{ y: "105%", opacity: 0 }}
-          animate={{ y: "0%", opacity: 1 }}
-          transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
-          className="block will-change-transform"
-        >
-          {children}
-        </motion.span>
-      </span>
+    <span className="block">
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom">
+          <motion.span
+            initial={{ y: "110%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.9, delay: delay + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-block will-change-transform"
+          >
+            {word}
+            {i < words.length - 1 ? "\u00A0" : ""}
+          </motion.span>
+        </span>
+      ))}
     </span>
+  );
+}
+
+function FloatChip({
+  label,
+  value,
+  className,
+  depth,
+  mouseX,
+  mouseY,
+  delay,
+}: {
+  label: string;
+  value: string;
+  className: string;
+  depth: number;
+  mouseX: ReturnType<typeof useMotionValue<number>>;
+  mouseY: ReturnType<typeof useMotionValue<number>>;
+  delay: number;
+}) {
+  const reduce = useReducedMotion();
+  const x = useTransform(mouseX, [-0.5, 0.5], [depth * 10, -depth * 10]);
+  const y = useTransform(mouseY, [-0.5, 0.5], [depth * 7, -depth * 7]);
+
+  return (
+    <motion.div
+      style={{ x, y }}
+      initial={reduce ? undefined : { opacity: 0, y: 24, scale: 0.92 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      className={`pointer-events-none absolute z-20 ${className}`}
+    >
+      <motion.div
+        animate={reduce ? undefined : { y: [0, -5, 0] }}
+        transition={{ duration: 5 + depth, repeat: Infinity, ease: "easeInOut" }}
+        className="rounded-xl border border-white/10 bg-black/35 px-3.5 py-2.5 backdrop-blur-md sm:px-4"
+      >
+        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/45">{label}</p>
+        <p className="mt-0.5 flex items-center gap-1.5 font-demo-serif text-sm font-semibold text-[var(--demo-paper)]">
+          <span aria-hidden className="size-1 rounded-full bg-[var(--demo-gold)]" />
+          {value}
+        </p>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -47,124 +94,168 @@ export function VitaHero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const sceneY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 70]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -50]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 90]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const mouseX = useSpring(useMotionValue(0), { stiffness: 60, damping: 20 });
+  const mouseY = useSpring(useMotionValue(0), { stiffness: 60, damping: 20 });
+
+  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (reduce || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
 
   return (
     <section
       id="top"
       ref={ref}
+      onMouseMove={onMouseMove}
       className="relative overflow-hidden pt-[72px]"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/4 h-[32rem] w-[40rem] rounded-full bg-[var(--demo-accent-deep)]/25 blur-[120px]"
-      />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--demo-gold)]/30 to-transparent"
       />
 
-      <DemoContainer className="grid min-h-[calc(100vh-72px)] items-center gap-14 pb-16 pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:pb-24 lg:pt-20">
+      <DemoContainer className="grid min-h-[calc(100vh-72px)] items-center gap-16 pb-16 pt-10 lg:grid-cols-[1fr_1.05fr] lg:gap-10 lg:pb-24 lg:pt-16">
         <motion.div style={{ y: textY, opacity }} className="relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-3 font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-[var(--demo-gold)]"
           >
-            <Eyebrow>Clínica médica · Medicina preventiva</Eyebrow>
-          </motion.div>
+            <span aria-hidden className="h-px w-8 bg-[var(--demo-gold)]/60" />
+            Clínica médica · Santiago
+          </motion.p>
 
-          <h1 className="mt-7 font-demo-serif text-[clamp(2.6rem,6vw,4.6rem)] font-semibold leading-[1.04] tracking-tight text-[var(--demo-paper)]">
-            <MaskedLine delay={0.15}>La salud que se</MaskedLine>
-            <MaskedLine delay={0.28}>ve en los resultados,</MaskedLine>
-            <MaskedLine delay={0.41} className="text-[var(--demo-gold)]">
-              no en las esperas.
-            </MaskedLine>
+          <h1 className="mt-7 font-demo-serif text-[clamp(2.8rem,6.5vw,5rem)] font-semibold leading-[1.02] tracking-tight text-[var(--demo-paper)]">
+            <Words text={copy} delay={0.2} />
           </h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-7 max-w-xl text-lg leading-relaxed text-white/60"
+            transition={{ delay: 0.85, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-7 max-w-md text-lg leading-relaxed text-white/60"
           >
-            Chequeos preventivos, medicina familiar y especialidades con médicos
-            que te conocen, te escuchan y no te hacen esperar.
+            Consultas sin prisa, especialistas que conocen tu historia y una
+            experiencia médica diseñada alrededor de ti.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mt-10 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row sm:items-center"
           >
-            <DemoButton size="lg" href="#contacto" className="w-full sm:w-auto">
-              Agendar hora
+            <DemoButton size="lg" href="#contacto" className="w-full sm:w-auto" data-cursor="agendar">
+              Agendar una hora
               <ArrowRight className="size-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
             </DemoButton>
-            <DemoButton size="lg" variant="outline" href="#servicios" className="w-full sm:w-auto">
-              Ver especialidades
+            <DemoButton size="lg" variant="outline" href="#experiencia" className="w-full sm:w-auto">
+              Conocer VITA
             </DemoButton>
           </motion.div>
 
-          <motion.dl
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.95, duration: 0.9 }}
-            className="mt-14 grid grid-cols-3 gap-6 border-t border-white/[0.08] pt-8"
+            transition={{ delay: 1.3, duration: 1 }}
+            className="mt-12 flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35"
           >
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-demo-serif text-3xl font-semibold tracking-tight text-[var(--demo-paper)] sm:text-4xl">
-                  <CountUp to={stat.value} prefix={stat.prefix} suffix={stat.suffix} decimals={stat.decimals} />
-                </dd>
-                <dd className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">
-                  {stat.label}
-                </dd>
-              </div>
-            ))}
-          </motion.dl>
+            <span aria-hidden className="h-px w-6 bg-white/20" />
+            Consultas de 30 minutos, siempre
+          </motion.p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.35, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative hidden lg:block"
+          transition={{ delay: 0.4, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          className="relative"
         >
-          <motion.div style={{ y: sceneY }} className="relative">
-            <FacadeScene tone="teal" className="aspect-[4/5] w-full rounded-2xl" />
-            <div className="absolute bottom-5 left-5 flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60 backdrop-blur">
-              <span aria-hidden className="size-1.5 rounded-full bg-[var(--demo-gold)]" />
-              Av. Isidora Goyenechea 3000 · Santiago
+          <motion.div style={{ y: photoY }} className="relative">
+            <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
+              <Image
+                src="/vita/hero.jpg"
+                alt="Médica conversando con una paciente en una consulta iluminada con luz natural"
+                width={1400}
+                height={1400}
+                priority
+                data-cursor="ver"
+                className="aspect-[4/5] w-full object-cover sm:aspect-[5/5.4]"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 sm:rounded-3xl"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/50 to-transparent"
+              />
             </div>
+
+            <FloatChip
+              label="Consulta"
+              value="10:30"
+              depth={1}
+              mouseX={mouseX}
+              mouseY={mouseY}
+              delay={1.1}
+              className="-left-3 top-10 sm:-left-8"
+            />
+            <FloatChip
+              label="Tu médico hoy"
+              value="Dr. Nicolás Paredes"
+              depth={1.8}
+              mouseX={mouseX}
+              mouseY={mouseY}
+              delay={1.3}
+              className="right-3 top-1/3 sm:right-2"
+            />
+            <FloatChip
+              label="Duración"
+              value="30 min"
+              depth={0.7}
+              mouseX={mouseX}
+              mouseY={mouseY}
+              delay={1.45}
+              className="-bottom-4 left-8 sm:left-12"
+            />
+            <FloatChip
+              label="Próximo control"
+              value="14 JUN"
+              depth={1.4}
+              mouseX={mouseX}
+              mouseY={mouseY}
+              delay={1.6}
+              className="-bottom-4 right-8 hidden sm:block"
+            />
           </motion.div>
         </motion.div>
       </DemoContainer>
 
-      <div className="lg:hidden">
-        <FacadeScene tone="teal" className="mx-6 aspect-[4/3] rounded-2xl sm:mx-10" />
-      </div>
-
       <motion.div
         style={{ opacity }}
-        className="relative z-10 mt-12 flex justify-center pb-10 lg:mt-6"
+        className="relative z-10 mt-2 flex justify-center pb-8"
       >
         <motion.a
-          href="#servicios"
-          aria-label="Bajar a servicios"
-          animate={reduce ? undefined : { y: [0, 8, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-white/40 transition-colors hover:text-[var(--demo-gold)]"
+          href="#experiencia"
+          aria-label="Bajar a la experiencia"
+          animate={reduce ? undefined : { y: [0, 6, 0] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-white/35 transition-colors hover:text-[var(--demo-gold)]"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em]">Explorar</span>
-          <span className="relative flex h-9 w-5 items-start justify-center rounded-full border border-current p-1">
+          <span className="font-mono text-[9px] uppercase tracking-[0.3em]">Explorar</span>
+          <span className="flex h-9 w-5 items-start justify-center rounded-full border border-current p-1">
             <motion.span
               animate={reduce ? undefined : { y: [0, 10, 0], opacity: [1, 0.2, 1] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
               className="size-1.5 rounded-full bg-current"
             />
           </span>

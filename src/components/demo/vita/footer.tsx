@@ -26,7 +26,7 @@ export function VitaFooter() {
               </span>
             </p>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/50">
-              Medicina con evidencia, atención con tiempo.
+              La medicina que te devuelve tiempo.
             </p>
           </div>
 

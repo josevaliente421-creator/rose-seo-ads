@@ -1,22 +1,23 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
   { label: "Servicios", href: "#servicios" },
   { label: "Especialidades", href: "#especialidades" },
-  { label: "Casos", href: "#casos" },
+  { label: "Cómo funciona", href: "#dia" },
   { label: "Equipo", href: "#equipo" },
-  { label: "Proceso", href: "#proceso" },
-  { label: "FAQ", href: "#faq" },
 ];
 
 export function VitaHeader() {
+  const reduce = useReducedMotion();
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -37,10 +38,15 @@ export function VitaHeader() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-white/[0.06] bg-[var(--demo-ink)]/85 backdrop-blur-xl"
+          ? "border-b border-white/[0.06] bg-[var(--demo-ink)]/80 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent",
       )}
     >
+      <motion.span
+        aria-hidden
+        style={reduce ? undefined : { scaleX: progress }}
+        className="absolute inset-x-0 top-0 block h-[2px] origin-left bg-gradient-to-r from-[var(--demo-accent-deep)] via-[var(--demo-gold)] to-[var(--demo-gold-bright)]"
+      />
       <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between px-6 sm:px-10 lg:px-12">
         <a href="#top" className="flex items-baseline gap-2" aria-label="VITA Clínica — inicio">
           <span className="font-demo-serif text-2xl font-bold tracking-tight text-[var(--demo-gold)]">
@@ -71,8 +77,9 @@ export function VitaHeader() {
           <a
             href="#contacto"
             className="hidden h-10 items-center rounded-full border border-[var(--demo-gold)]/40 px-5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--demo-gold)] transition-all hover:border-[var(--demo-gold)] hover:bg-[var(--demo-gold)]/10 sm:inline-flex"
+            data-cursor="agendar"
           >
-            Agendar reunión
+            Agendar hora
           </a>
           <button
             type="button"
@@ -139,7 +146,7 @@ export function VitaHeader() {
                 transition={{ delay: 0.4, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="flex h-13 w-full items-center justify-center rounded-full bg-[var(--demo-gold)] font-mono text-[12px] font-medium uppercase tracking-[0.18em] text-[#1a0b10]"
               >
-                Agendar reunión
+                Agendar hora
               </motion.a>
             </div>
           </motion.div>
