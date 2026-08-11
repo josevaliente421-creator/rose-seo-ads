@@ -185,6 +185,7 @@ export const templates: Template[] = [
     gradient: "from-[#4A1A0A] via-[#B45309] to-[#E8A35C]",
     accent: "bg-[#B45309]",
     image: "/fuego.png",
+    demo: "/demo/fuego",
     highlight: true,
   },
   {

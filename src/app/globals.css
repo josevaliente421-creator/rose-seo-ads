@@ -237,6 +237,18 @@
   color: var(--demo-paper);
 }
 
+.demo-fuego {
+  --demo-ink: #120b07;
+  --demo-ink-2: #1c110a;
+  --demo-accent-deep: #331a08;
+  --demo-gold: #e8a35c;
+  --demo-gold-bright: #f4c98e;
+  --demo-paper: #f7f0e6;
+
+  background-color: var(--demo-ink);
+  color: var(--demo-paper);
+}
+
 .font-demo-serif {
   font-family: var(--font-cormorant), Georgia, "Times New Roman", serif;
 }
