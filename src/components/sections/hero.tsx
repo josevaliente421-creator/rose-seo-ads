@@ -153,15 +153,15 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.35, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ delay: 1.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="relative mt-14 flex justify-center sm:hidden"
             aria-hidden
           >
             <div
               aria-hidden
-              className="absolute top-1/2 h-48 w-48 -translate-y-1/2 rounded-full bg-gradient-to-b from-brand/14 to-transparent blur-2xl"
+              className="absolute top-1/2 h-56 w-56 -translate-y-1/2 rounded-full bg-gradient-to-b from-brand/25 via-brand/10 to-transparent blur-3xl"
             />
-            <GlassRose className="h-40 w-40" />
+            <GlassRose className="h-52 w-52" variant="hero" />
           </motion.div>
         </motion.div>
 
@@ -169,15 +169,22 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.35, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mx-auto hidden aspect-square w-full max-w-[360px] items-center justify-center sm:flex lg:max-w-[520px]"
+          className="relative mx-auto hidden aspect-square w-full max-w-[380px] items-center justify-center sm:flex lg:max-w-[540px]"
         >
+          {/* Ambient Multi-layer Volumetric Aura behind Rose */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-gradient-to-tr from-brand/20 via-brand-dark/20 to-transparent blur-3xl animate-pulse"
+            style={{ animationDuration: "8s" }}
+          />
+
           <motion.div style={{ x: sx, y: sy }} className="relative h-full w-full">
             <motion.div style={{ y: roseY }} className="absolute inset-0 flex items-center justify-center">
-              <GlassRose className="h-[72%] w-[72%]" />
+              <GlassRose className="h-[80%] w-[80%]" variant="hero" interactive={true} />
             </motion.div>
 
             <FloatingCard delay={1.1} className="absolute left-0 top-[16%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-soft">
+              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <TrendingUp className="size-4.5" aria-hidden />
                 </span>
@@ -193,7 +200,7 @@ export function Hero() {
             </FloatingCard>
 
             <FloatingCard delay={1.35} className="absolute right-0 top-[38%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-soft">
+              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <Timer className="size-4.5" aria-hidden />
                 </span>
@@ -207,7 +214,7 @@ export function Hero() {
             </FloatingCard>
 
             <FloatingCard delay={1.6} className="absolute bottom-[8%] left-[10%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-soft">
+              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <Gauge className="size-4.5" aria-hidden />
                 </span>
@@ -223,7 +230,7 @@ export function Hero() {
             </FloatingCard>
 
             <FloatingCard delay={1.85} className="absolute right-[6%] bottom-[22%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-border px-4 py-3 shadow-soft">
+              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
                   <BadgeCheck className="size-4.5" aria-hidden />
                 </span>
