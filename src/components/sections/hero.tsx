@@ -9,33 +9,50 @@ import {
   useTransform,
   useReducedMotion,
 } from "framer-motion";
-import { ArrowRight, BadgeCheck, TrendingUp, Gauge, Timer } from "lucide-react";
+import { ArrowRight, BadgeCheck, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassRose } from "@/components/mockup/glass-rose";
 import { TextReveal } from "@/components/motion/text-reveal";
 import { Magnetic } from "@/components/motion/magnetic";
-import { CountUp } from "@/components/motion/count-up";
 
-function FloatingCard({
+function EditorialAnnotation({
+  number,
+  title,
+  subtitle,
   className,
-  children,
   delay = 0,
+  align = "left",
 }: {
+  number: string;
+  title: string;
+  subtitle: string;
   className?: string;
-  children: React.ReactNode;
   delay?: number;
+  align?: "left" | "right";
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.92 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className={className}
     >
-      <div className="animate-float" style={{ animationDelay: `${delay}s` }}>
-        {children}
+      <div
+        className={`group relative flex flex-col gap-1 transition-transform duration-300 hover:scale-[1.02] ${
+          align === "right" ? "items-end text-right" : "items-start text-left"
+        }`}
+      >
+        <span className="font-mono text-[10px] tracking-[0.25em] text-brand/80 font-medium">
+          [{number}]
+        </span>
+        <p className="font-display text-xs font-bold tracking-wider uppercase text-foreground/90">
+          {title}
+        </p>
+        <p className="font-sans text-[11px] text-muted-foreground leading-tight max-w-[140px]">
+          {subtitle}
+        </p>
       </div>
     </motion.div>
   );
@@ -48,20 +65,20 @@ export function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const roseY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const roseY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 60, damping: 20 });
-  const sy = useSpring(my, { stiffness: 60, damping: 20 });
+  const sx = useSpring(mx, { stiffness: 45, damping: 20 });
+  const sy = useSpring(my, { stiffness: 45, damping: 20 });
 
   function onMouseMove(e: React.MouseEvent) {
     if (reduce) return;
     const { innerWidth, innerHeight } = window;
-    mx.set((e.clientX / innerWidth - 0.5) * 18);
-    my.set((e.clientY / innerHeight - 0.5) * 18);
+    mx.set((e.clientX / innerWidth - 0.5) * 14);
+    my.set((e.clientY / innerHeight - 0.5) * 14);
   }
 
   return (
@@ -73,30 +90,31 @@ export function Hero() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-noise opacity-40 dark:opacity-20"
+        className="pointer-events-none absolute inset-0 bg-noise opacity-35 dark:opacity-20"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-48 left-1/2 h-[34rem] w-[54rem] -translate-x-1/2 rounded-full bg-gradient-to-b from-brand/12 to-transparent blur-3xl"
+        className="pointer-events-none absolute -top-40 left-1/2 h-[38rem] w-[58rem] -translate-x-1/2 rounded-full bg-gradient-to-b from-brand/10 to-transparent blur-3xl"
       />
 
-      <Container className="relative z-10 grid flex-1 items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+      <Container className="relative z-10 grid flex-1 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        {/* Left Column: Editorial Copy */}
         <motion.div style={{ y: textY, opacity }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Badge className="mb-8">
+            <Badge className="mb-8 gap-2 bg-brand/5 border-brand/20 text-brand">
               <span aria-hidden className="relative flex size-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-60" />
                 <span className="relative inline-flex size-1.5 rounded-full bg-brand" />
               </span>
-              Agenda abierta · 2 cupos este mes
+              De semilla a florecimiento · Tu presencia digital
             </Badge>
           </motion.div>
 
-          <h1 className="font-display text-[clamp(2.9rem,7vw,6rem)] font-bold leading-[1.02] tracking-tight text-balance">
+          <h1 className="font-display text-[clamp(2.8rem,6.8vw,5.8rem)] font-bold leading-[1.03] tracking-tight text-balance">
             <TextReveal text="Tu negocio" delay={0.1} />
             <TextReveal text="online, listo" delay={0.3} />
             <span className="inline-flex items-baseline">
@@ -114,7 +132,7 @@ export function Hero() {
             className="mt-7 max-w-lg text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl"
           >
             Sitios web premium que convierten visitantes en clientes.
-            Diseño, desarrollo y SEO en una sola semana — sin excusas.
+            Diseño artesanal, desarrollo a medida y SEO desde el lanzamiento — sin excusas.
           </motion.p>
 
           <motion.div
@@ -142,7 +160,7 @@ export function Hero() {
             transition={{ delay: 1.2, duration: 0.8 }}
             className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-muted-foreground"
           >
-            {["Diseño a medida", "SEO incluido", "Soporte 24h"].map((item) => (
+            {["Diseño exclusivo", "SEO incluido", "Soporte dedicado"].map((item) => (
               <li key={item} className="flex items-center gap-2">
                 <BadgeCheck className="size-4 text-brand" aria-hidden />
                 {item}
@@ -150,102 +168,89 @@ export function Hero() {
             ))}
           </motion.ul>
 
+          {/* Mobile Rose View */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mt-14 flex justify-center sm:hidden"
+            transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative mt-12 flex justify-center sm:hidden"
             aria-hidden
           >
-            <div
-              aria-hidden
-              className="absolute top-1/2 h-56 w-56 -translate-y-1/2 rounded-full bg-gradient-to-b from-brand/25 via-brand/10 to-transparent blur-3xl"
-            />
-            <GlassRose className="h-52 w-52" variant="hero" />
+            <div className="relative h-64 w-64">
+              <GlassRose className="h-full w-full" variant="hero" interactive={false} />
+            </div>
           </motion.div>
         </motion.div>
 
+        {/* Right Column: Editorial Botanical Rose Art Centerpiece */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.35, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mx-auto hidden aspect-square w-full max-w-[380px] items-center justify-center sm:flex lg:max-w-[540px]"
+          transition={{ delay: 0.3, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          className="relative mx-auto hidden aspect-square w-full max-w-[420px] items-center justify-center sm:flex lg:max-w-[560px]"
         >
-          {/* Ambient Multi-layer Volumetric Aura behind Rose */}
+          {/* Subtle Ambient Circular Orbit Hairline */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-gradient-to-tr from-brand/20 via-brand-dark/20 to-transparent blur-3xl animate-pulse"
-            style={{ animationDuration: "8s" }}
+            className="pointer-events-none absolute inset-8 rounded-full border border-border/40 dark:border-white/5 opacity-70"
           />
 
           <motion.div style={{ x: sx, y: sy }} className="relative h-full w-full">
-            <motion.div style={{ y: roseY }} className="absolute inset-0 flex items-center justify-center">
-              <GlassRose className="h-[80%] w-[80%]" variant="hero" interactive={true} />
+            {/* The Botanical Rose Centerpiece */}
+            <motion.div
+              style={{ y: roseY }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <div className="relative h-[86%] w-[86%]">
+                <GlassRose className="h-full w-full" variant="hero" interactive={true} />
+              </div>
             </motion.div>
 
-            <FloatingCard delay={1.1} className="absolute left-0 top-[16%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                  <TrendingUp className="size-4.5" aria-hidden />
-                </span>
-                <div>
-                  <p className="font-display text-lg font-bold leading-none">
-                    +<CountUp to={38} suffix="%" />
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    más conversión
-                  </p>
-                </div>
-              </div>
-            </FloatingCard>
+            {/* Editorial Hairline Connectors & Annotations */}
+            {/* Top Left: 100% Responsive */}
+            <EditorialAnnotation
+              number="01"
+              title="100% Responsive"
+              subtitle="Rendimiento fluido y perfecto en móvil y desktop"
+              align="left"
+              delay={1.2}
+              className="absolute -left-2 top-[12%]"
+            />
 
-            <FloatingCard delay={1.35} className="absolute right-0 top-[38%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                  <Timer className="size-4.5" aria-hidden />
-                </span>
-                <div>
-                  <p className="font-display text-lg font-bold leading-none">7 días</p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    entrega garantizada
-                  </p>
-                </div>
-              </div>
-            </FloatingCard>
+            {/* Top Right: Entrega en 7 días */}
+            <EditorialAnnotation
+              number="02"
+              title="Entrega en 7 Días"
+              subtitle="Lanzamiento puntual garantizado sin demoras"
+              align="right"
+              delay={1.4}
+              className="absolute -right-2 top-[18%]"
+            />
 
-            <FloatingCard delay={1.6} className="absolute bottom-[8%] left-[10%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                  <Gauge className="size-4.5" aria-hidden />
-                </span>
-                <div>
-                  <p className="font-display text-lg font-bold leading-none">
-                    <CountUp to={98} suffix="/100" />
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    Performance
-                  </p>
-                </div>
-              </div>
-            </FloatingCard>
+            {/* Bottom Left: Diseño a Medida */}
+            <EditorialAnnotation
+              number="03"
+              title="Diseño a Medida"
+              subtitle="Dirección de arte única para tu marca"
+              align="left"
+              delay={1.6}
+              className="absolute -left-2 bottom-[14%]"
+            />
 
-            <FloatingCard delay={1.85} className="absolute right-[6%] bottom-[22%]">
-              <div className="glass flex items-center gap-3 rounded-2xl border border-white/20 dark:border-white/10 px-4 py-3 shadow-lift backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-brand/40">
-                <span className="flex size-9 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                  <BadgeCheck className="size-4.5" aria-hidden />
-                </span>
-                <div>
-                  <p className="font-display text-lg font-bold leading-none">SEO</p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    desde el día 1
-                  </p>
-                </div>
-              </div>
-            </FloatingCard>
+            {/* Bottom Right: SEO desde el día 1 */}
+            <EditorialAnnotation
+              number="04"
+              title="SEO Estructural"
+              subtitle="Preparado para posicionar en Google desde el inicio"
+              align="right"
+              delay={1.8}
+              className="absolute -right-2 bottom-[14%]"
+            />
           </motion.div>
         </motion.div>
       </Container>
 
+      {/* Scroll Indicator */}
       <motion.div
         style={{ opacity }}
         className="relative z-10 mt-16 flex justify-center lg:mt-6"

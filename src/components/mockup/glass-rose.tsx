@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useId, useRef, useState, useEffect } from "react";
 import {
   motion,
   useMotionValue,
@@ -10,33 +10,39 @@ import {
 } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type GlassRoseProps = {
+type BotanicalRoseProps = {
   className?: string;
   variant?: "hero" | "cta" | "compact";
   interactive?: boolean;
+  stageProgress?: number; // 0 (semilla) to 1 (florecimiento pleno)
 };
 
 export function GlassRose({
   className,
   variant = "hero",
   interactive = true,
-}: GlassRoseProps) {
+}: BotanicalRoseProps) {
   const uid = useId().replace(/[:]/g, "");
   const reduce = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Mouse tracking for dynamic 3D specular light and tilt
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Mouse tracking with gentle spring physics (strictly bounded)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springConfig = { stiffness: 120, damping: 25, mass: 0.5 };
+  const springConfig = { stiffness: 65, damping: 22, mass: 0.8 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  const rotateX = useTransform(smoothY, [-0.5, 0.5], [10, -10]);
-  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-10, 10]);
-  const lightX = useTransform(smoothX, [-0.5, 0.5], ["25%", "75%"]);
-  const lightY = useTransform(smoothY, [-0.5, 0.5], ["20%", "65%"]);
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [6, -6]);
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-6, 6]);
+  const lightShiftX = useTransform(smoothX, [-0.5, 0.5], ["38%", "62%"]);
+  const lightShiftY = useTransform(smoothY, [-0.5, 0.5], ["35%", "55%"]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     if (!interactive || reduce || !containerRef.current) return;
@@ -52,73 +58,72 @@ export function GlassRose({
     mouseY.set(0);
   }
 
+  // Animation Timings for "De semilla a florecimiento"
+  const easeCurve = [0.16, 1, 0.3, 1] as const;
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative flex items-center justify-center select-none perspective-[1000px]",
+        "relative flex items-center justify-center select-none perspective-[1200px]",
         className
       )}
       role="img"
-      aria-label="Rosa facetada de cristal rubí, isotipo oficial animado de Rose SEO & Ads"
+      aria-label="Escultura botánica de una rosa viva, floreciendo para Rose SEO & Ads"
     >
-      {/* Dynamic Ambient Glow Behind Rose */}
+      {/* ── 1. ATMÓSFERA: Halo de Luz Cálida y Difusa ─────────────── */}
       <motion.div
         aria-hidden
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={
-          reduce
-            ? undefined
-            : {
-                scale: [1, 1.08, 1],
-                opacity: variant === "cta" ? [0.45, 0.75, 0.45] : [0.35, 0.6, 0.35],
+          mounted
+            ? {
+                opacity: variant === "cta" ? [0.4, 0.65, 0.4] : [0.3, 0.5, 0.3],
+                scale: [0.96, 1.04, 0.96],
               }
+            : {}
         }
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-gradient-to-tr from-brand-dark/40 via-brand/35 to-rose-400/25 blur-3xl"
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="pointer-events-none absolute inset-[-15%] -z-10 rounded-full bg-gradient-to-tr from-brand-dark/25 via-brand/20 to-rose-300/15 blur-[80px] dark:from-brand-dark/40 dark:via-brand/30 dark:to-rose-400/20"
       />
 
-      {/* Floating Crystal Sparkles */}
+      {/* ── 2. MICRO-PARTÍCULAS BOTÁNICAS SUTILES (NO NEÓN) ────────── */}
       {!reduce && (
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-5 overflow-visible">
           {[
-            { top: "12%", left: "18%", delay: 0, size: "h-2 w-2" },
-            { top: "22%", right: "14%", delay: 1.5, size: "h-2.5 w-2.5" },
-            { bottom: "20%", left: "15%", delay: 3, size: "h-2 w-2" },
-            { bottom: "16%", right: "22%", delay: 2.2, size: "h-3 w-3" },
-            { top: "48%", left: "6%", delay: 4, size: "h-1.5 w-1.5" },
-            { top: "35%", right: "8%", delay: 2.8, size: "h-2 w-2" },
-          ].map((sparkle, idx) => (
+            { top: "18%", left: "12%", delay: 0.5, d: 6 },
+            { top: "28%", right: "10%", delay: 1.8, d: 7.5 },
+            { bottom: "24%", left: "16%", delay: 3.2, d: 8 },
+            { bottom: "18%", right: "15%", delay: 2.2, d: 6.5 },
+          ].map((dust, idx) => (
             <motion.span
               key={idx}
               style={{
-                top: sparkle.top,
-                left: sparkle.left,
-                right: sparkle.right,
-                bottom: sparkle.bottom,
+                top: dust.top,
+                left: dust.left,
+                right: dust.right,
+                bottom: dust.bottom,
               }}
               animate={{
-                scale: [0, 1.2, 0],
-                opacity: [0, 0.95, 0],
-                rotate: [0, 90, 180],
+                y: [0, -18, 0],
+                opacity: [0, 0.45, 0],
+                scale: [0.6, 1, 0.6],
               }}
               transition={{
-                duration: 4,
-                delay: sparkle.delay,
+                duration: dust.d,
+                delay: dust.delay,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className={cn(
-                "absolute rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.95),0_0_24px_rgba(226,104,143,0.7)]",
-                sparkle.size
-              )}
+              className="absolute size-1.5 rounded-full bg-brand/35 blur-[0.5px] dark:bg-rose-300/40"
             />
           ))}
         </div>
       )}
 
-      {/* 3D Animated Faceted Rose SVG Container */}
+      {/* ── 3. CONTENEDOR VIVO CON PARALLAX 3D Y RESPIRACIÓN ───────── */}
       <motion.div
         style={
           interactive && !reduce
@@ -133,294 +138,358 @@ export function GlassRose({
           reduce
             ? undefined
             : {
-                y: [0, -10, 0],
-                rotateZ: [-1.5, 1.5, -1.5],
+                y: [0, -7, 0],
+                scale: [1, 1.012, 1],
               }
         }
         transition={{
-          y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
-          rotateZ: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+          y: { duration: 6.5, repeat: Infinity, ease: "easeInOut" },
+          scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="relative h-full w-full will-change-transform"
+        className="relative h-full w-full will-change-transform flex items-center justify-center"
       >
         <svg
-          viewBox="0 0 500 500"
+          viewBox="0 0 600 600"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-full w-full drop-shadow-[0_20px_35px_rgba(74,16,37,0.35)] dark:drop-shadow-[0_25px_45px_rgba(226,104,143,0.35)]"
+          className="h-full w-full overflow-visible drop-shadow-[0_24px_48px_rgba(74,16,37,0.18)] dark:drop-shadow-[0_30px_60px_rgba(226,104,143,0.22)]"
         >
           <defs>
-            {/* Shaders and Gradients for Faceted Ruby Glass */}
-            <linearGradient id={`${uid}-ruby-1`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#d94b76" />
-              <stop offset="45%" stopColor="#96294a" />
+            {/* ── GRADIENTES BOTÁNICOS SATINADOS DE ROSE SEO & ADS ── */}
+            {/* Capa Exterior: Terciopelo Burdeos Profundo a Carmín Suave */}
+            <radialGradient id={`${uid}-petal-outer-1`} cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stopColor="#96294a" />
+              <stop offset="55%" stopColor="#7a1f3d" />
               <stop offset="100%" stopColor="#4a1025" />
-            </linearGradient>
-
-            <linearGradient id={`${uid}-ruby-2`} x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#f4729b" />
-              <stop offset="35%" stopColor="#b02f57" />
-              <stop offset="100%" stopColor="#5c132f" />
-            </linearGradient>
-
-            <linearGradient id={`${uid}-ruby-3`} x1="50%" y1="0%" x2="50%" y2="100%">
-              <stop offset="0%" stopColor="#e25d86" />
-              <stop offset="50%" stopColor="#7a1f3d" />
-              <stop offset="100%" stopColor="#3b0a1c" />
-            </linearGradient>
-
-            <linearGradient id={`${uid}-ruby-core`} x1="20%" y1="0%" x2="80%" y2="100%">
-              <stop offset="0%" stopColor="#fb7185" />
-              <stop offset="40%" stopColor="#9f1239" />
-              <stop offset="100%" stopColor="#4c0519" />
-            </linearGradient>
-
-            <linearGradient id={`${uid}-ruby-highlight`} x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#881337" />
-              <stop offset="60%" stopColor="#be123c" />
-              <stop offset="100%" stopColor="#fda4af" />
-            </linearGradient>
-
-            {/* Specular Shimmer Sweep Effect */}
-            <linearGradient id={`${uid}-light-sweep`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="white" stopOpacity="0" />
-              <stop offset="40%" stopColor="white" stopOpacity="0" />
-              <stop offset="50%" stopColor="white" stopOpacity="0.85" />
-              <stop offset="55%" stopColor="#ffe4e6" stopOpacity="0.95" />
-              <stop offset="60%" stopColor="white" stopOpacity="0" />
-              <stop offset="100%" stopColor="white" stopOpacity="0" />
-            </linearGradient>
-
-            {/* Soft Ambient Inner Glow */}
-            <radialGradient id={`${uid}-glow`} cx="50%" cy="45%" r="55%">
-              <stop offset="0%" stopColor="#ff7597" stopOpacity="0.4" />
-              <stop offset="60%" stopColor="#96294a" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="#4a1025" stopOpacity="0" />
             </radialGradient>
 
-            {/* Bevel Stroke Filter for Crystal Edge Shimmer */}
-            <filter id={`${uid}-crystal-glow`} x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#ffe4e6" floodOpacity="0.4" />
+            <radialGradient id={`${uid}-petal-outer-2`} cx="40%" cy="30%" r="70%">
+              <stop offset="0%" stopColor="#a33256" />
+              <stop offset="60%" stopColor="#7a1f3d" />
+              <stop offset="100%" stopColor="#3d0a1b" />
+            </radialGradient>
+
+            {/* Capa Media: Aterciopelado con reflejos rosados sutiles */}
+            <radialGradient id={`${uid}-petal-mid-1`} cx="45%" cy="35%" r="60%">
+              <stop offset="0%" stopColor="#b83a60" />
+              <stop offset="50%" stopColor="#872243" />
+              <stop offset="100%" stopColor="#4a1025" />
+            </radialGradient>
+
+            <radialGradient id={`${uid}-petal-mid-2`} cx="55%" cy="30%" r="65%">
+              <stop offset="0%" stopColor="#c2446c" />
+              <stop offset="45%" stopColor="#96294a" />
+              <stop offset="100%" stopColor="#4a1025" />
+            </radialGradient>
+
+            {/* Capa Interior: Copa y Cáliz Cálido */}
+            <radialGradient id={`${uid}-petal-inner-1`} cx="50%" cy="30%" r="55%">
+              <stop offset="0%" stopColor="#d45b81" />
+              <stop offset="45%" stopColor="#96294a" />
+              <stop offset="100%" stopColor="#4a1025" />
+            </radialGradient>
+
+            <radialGradient id={`${uid}-petal-inner-2`} cx="35%" cy="25%" r="60%">
+              <stop offset="0%" stopColor="#e2688f" />
+              <stop offset="40%" stopColor="#a82e52" />
+              <stop offset="100%" stopColor="#4a1025" />
+            </radialGradient>
+
+            {/* Núcleo Profundo / Corazón de la Rosa */}
+            <radialGradient id={`${uid}-core`} cx="45%" cy="40%" r="50%">
+              <stop offset="0%" stopColor="#f07e9f" />
+              <stop offset="35%" stopColor="#b83a60" />
+              <stop offset="70%" stopColor="#661330" />
+              <stop offset="100%" stopColor="#2c0513" />
+            </radialGradient>
+
+            {/* Sombra de Oclusión Botánica entre Capas */}
+            <radialGradient id={`${uid}-shadow`} cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#1f030d" stopOpacity="0.75" />
+              <stop offset="65%" stopColor="#3d0a1b" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#3d0a1b" stopOpacity="0" />
+            </radialGradient>
+
+            {/* Brillo Satinado Especular en Aristas de Pétalos */}
+            <linearGradient id={`${uid}-sheen`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.45" />
+              <stop offset="50%" stopColor="#ffd6e0" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+            </linearGradient>
+
+            {/* Filtro Suave para Sombras de Pétalos */}
+            <filter id={`${uid}-drop-shadow`} x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#3d0a1b" floodOpacity="0.35" />
+            </filter>
+
+            <filter id={`${uid}-soft-blur`} x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" />
             </filter>
           </defs>
 
-          {/* Background Ambient Radial Pool */}
-          <circle cx="250" cy="245" r="190" fill={`url(#${uid}-glow)`} />
+          {/* Sombra de apoyo en la base */}
+          <ellipse
+            cx="300"
+            cy="460"
+            rx="160"
+            ry="30"
+            fill={`url(#${uid}-shadow)`}
+            filter={`url(#${uid}-soft-blur)`}
+            opacity="0.6"
+          />
 
-          {/* ========================================================= */}
-          {/* FACETED GEOMETRY - FAITHFUL TO THE ROSE LOGO ISOTYPE     */}
-          {/* ========================================================= */}
-
-          {/* BASE & LOWER FACETS */}
-          <g className="transition-all duration-500">
-            {/* Bottom-right base diamond facet */}
+          {/* =================================================================== */}
+          {/* FASE 4: PÉTALOS EXTERIORES DE GUARDA (Despliegue Final Majestuoso) */}
+          {/* =================================================================== */}
+          <motion.g
+            initial={{ scale: 0.35, opacity: 0, rotate: -22 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{
+              duration: 2.8,
+              delay: 1.4,
+              ease: easeCurve,
+            }}
+            style={{ transformOrigin: "300px 300px" }}
+          >
+            {/* Pétalo Exterior Inferior Izquierdo */}
             <path
-              d="M 215 352 L 275 350 L 305 408 L 225 418 Z"
-              fill={`url(#${uid}-ruby-3)`}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
+              d="M 285 410 C 205 440, 115 395, 110 305 C 105 240, 170 205, 230 220 C 190 280, 210 365, 285 410 Z"
+              fill={`url(#${uid}-petal-outer-1)`}
+              stroke="rgba(255,255,255,0.15)"
+              strokeWidth="0.8"
             />
-            {/* Bottom-center base trapezoid */}
+            {/* Borde curvado / doblez de pétalo */}
             <path
-              d="M 198 358 L 225 418 L 195 408 L 180 365 Z"
-              fill={`url(#${uid}-ruby-1)`}
+              d="M 115 305 C 130 365, 195 410, 265 405 C 215 390, 155 350, 125 290 Z"
+              fill={`url(#${uid}-petal-outer-2)`}
+              opacity="0.85"
+            />
+
+            {/* Pétalo Exterior Inferior Derecho */}
+            <path
+              d="M 315 410 C 395 440, 485 395, 490 305 C 495 240, 430 205, 370 220 C 410 280, 390 365, 315 410 Z"
+              fill={`url(#${uid}-petal-outer-2)`}
+              stroke="rgba(255,255,255,0.15)"
+              strokeWidth="0.8"
+            />
+            <path
+              d="M 485 305 C 470 365, 405 410, 335 405 C 385 390, 445 350, 475 290 Z"
+              fill={`url(#${uid}-petal-outer-1)`}
+              opacity="0.85"
+            />
+
+            {/* Pétalo Exterior Superior (Corona de la rosa) */}
+            <path
+              d="M 195 190 C 240 115, 360 115, 405 190 C 385 240, 335 255, 300 255 C 265 255, 215 240, 195 190 Z"
+              fill={`url(#${uid}-petal-outer-1)`}
+              stroke="rgba(255,255,255,0.18)"
+              strokeWidth="0.8"
+            />
+            {/* Labio superior enrollado suave */}
+            <path
+              d="M 230 160 C 275 125, 325 125, 370 160 C 340 148, 260 148, 230 160 Z"
+              fill={`url(#${uid}-sheen)`}
+              opacity="0.5"
+            />
+
+            {/* Pétalo Exterior Lateral Izquierdo */}
+            <path
+              d="M 160 215 C 95 255, 95 345, 165 395 C 185 365, 195 315, 190 270 C 185 245, 175 225, 160 215 Z"
+              fill={`url(#${uid}-petal-outer-2)`}
+              stroke="rgba(255,255,255,0.12)"
+              strokeWidth="0.8"
+            />
+
+            {/* Pétalo Exterior Lateral Derecho */}
+            <path
+              d="M 440 215 C 505 255, 505 345, 435 395 C 415 365, 405 315, 410 270 C 415 245, 425 225, 440 215 Z"
+              fill={`url(#${uid}-petal-outer-1)`}
+              stroke="rgba(255,255,255,0.12)"
+              strokeWidth="0.8"
+            />
+          </motion.g>
+
+          {/* =================================================================== */}
+          {/* FASE 3: PÉTALOS MEDIOS (Cáliz Abriéndose y Desenrollándose)        */}
+          {/* =================================================================== */}
+          <motion.g
+            initial={{ scale: 0.3, opacity: 0, rotate: 18 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{
+              duration: 2.5,
+              delay: 0.9,
+              ease: easeCurve,
+            }}
+            style={{ transformOrigin: "300px 300px" }}
+          >
+            {/* Sombra de oclusión media */}
+            <ellipse cx="300" cy="305" rx="145" ry="125" fill={`url(#${uid}-shadow)`} opacity="0.5" />
+
+            {/* Pétalo Medio Inferior Envolvente */}
+            <path
+              d="M 175 330 C 210 405, 390 405, 425 330 C 370 380, 230 380, 175 330 Z"
+              fill={`url(#${uid}-petal-mid-1)`}
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="0.9"
+            />
+            {/* Doblez satinado del borde inferior */}
+            <path
+              d="M 205 350 C 255 395, 345 395, 395 350 C 350 375, 250 375, 205 350 Z"
+              fill={`url(#${uid}-sheen)`}
+              opacity="0.4"
+            />
+
+            {/* Pétalo Medio Izquierdo Cóncavo */}
+            <path
+              d="M 170 245 C 135 305, 175 370, 240 375 C 205 335, 205 275, 230 230 C 205 230, 185 235, 170 245 Z"
+              fill={`url(#${uid}-petal-mid-2)`}
+              stroke="rgba(255,255,255,0.18)"
+              strokeWidth="0.8"
+            />
+
+            {/* Pétalo Medio Derecho Cóncavo */}
+            <path
+              d="M 430 245 C 465 305, 425 370, 360 375 C 395 335, 395 275, 370 230 C 395 230, 415 235, 430 245 Z"
+              fill={`url(#${uid}-petal-mid-1)`}
+              stroke="rgba(255,255,255,0.18)"
+              strokeWidth="0.8"
+            />
+
+            {/* Pétalo Medio Superior */}
+            <path
+              d="M 215 205 C 260 165, 340 165, 385 205 C 355 240, 245 240, 215 205 Z"
+              fill={`url(#${uid}-petal-mid-2)`}
+              stroke="rgba(255,255,255,0.22)"
+              strokeWidth="0.8"
+            />
+          </motion.g>
+
+          {/* =================================================================== */}
+          {/* FASE 2: PÉTALOS INTERIORES DE COPA (Corazón Desplegándose)         */}
+          {/* =================================================================== */}
+          <motion.g
+            initial={{ scale: 0.25, opacity: 0, rotate: -15 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{
+              duration: 2.2,
+              delay: 0.5,
+              ease: easeCurve,
+            }}
+            style={{ transformOrigin: "300px 300px" }}
+          >
+            {/* Oclusión profunda del centro */}
+            <circle cx="300" cy="295" r="95" fill={`url(#${uid}-shadow)`} opacity="0.75" />
+
+            {/* Pétalo de Copa Frontal */}
+            <path
+              d="M 210 295 C 235 355, 365 355, 390 295 C 350 335, 250 335, 210 295 Z"
+              fill={`url(#${uid}-petal-inner-1)`}
+              stroke="rgba(255,255,255,0.28)"
+              strokeWidth="0.9"
+            />
+
+            {/* Pétalo de Copa Lateral Izquierdo */}
+            <path
+              d="M 215 250 C 190 295, 220 340, 275 340 C 245 305, 245 265, 265 235 C 240 235, 225 240, 215 250 Z"
+              fill={`url(#${uid}-petal-inner-2)`}
               stroke="rgba(255,255,255,0.25)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
+              strokeWidth="0.8"
             />
-            {/* Bottom-left outer wing */}
+
+            {/* Pétalo de Copa Lateral Derecho */}
             <path
-              d="M 180 365 L 195 408 L 138 395 L 140 360 Z"
-              fill={`url(#${uid}-ruby-2)`}
+              d="M 385 250 C 410 295, 380 340, 325 340 C 355 305, 355 265, 335 235 C 360 235, 375 240, 385 250 Z"
+              fill={`url(#${uid}-petal-inner-1)`}
+              stroke="rgba(255,255,255,0.25)"
+              strokeWidth="0.8"
+            />
+
+            {/* Pétalo de Copa Superior Abrazador */}
+            <path
+              d="M 240 225 C 275 195, 325 195, 360 225 C 335 255, 265 255, 240 225 Z"
+              fill={`url(#${uid}-petal-inner-2)`}
               stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
+              strokeWidth="0.9"
             />
-          </g>
+          </motion.g>
 
-          {/* LEFT WING FACETS */}
-          <g>
-            {/* Leftmost outer shield petal */}
+          {/* =================================================================== */}
+          {/* FASE 1: NÚCLEO / CORAZÓN EN ESPIRAL ÁUREA (Semilla & Centro Vivo)   */}
+          {/* =================================================================== */}
+          <motion.g
+            initial={{ scale: 0.1, opacity: 0, rotate: 45 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{
+              duration: 1.9,
+              delay: 0.15,
+              ease: easeCurve,
+            }}
+            style={{ transformOrigin: "300px 285px" }}
+          >
+            {/* Espiral central botánica continua */}
             <path
-              d="M 130 350 L 140 270 L 175 295 L 180 365 L 130 350 Z"
-              fill={`url(#${uid}-ruby-1)`}
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="1.2"
+              d="M 255 270 C 245 295, 270 320, 305 320 C 340 320, 360 295, 350 270 C 340 245, 310 235, 285 245 C 265 255, 265 280, 285 290 C 305 300, 325 290, 325 275 C 325 265, 315 258, 302 260 C 292 262, 290 272, 298 276 C 304 279, 310 275, 308 270"
+              fill="none"
+              stroke={`url(#${uid}-core)`}
+              strokeWidth="18"
+              strokeLinecap="round"
               strokeLinejoin="round"
             />
-            {/* Left mid-upper curved flank facet */}
+
+            {/* Pétalos envolventes del centro íntimo */}
             <path
-              d="M 140 270 L 170 205 L 202 245 L 175 295 Z"
-              fill={`url(#${uid}-ruby-2)`}
+              d="M 265 265 C 260 290, 300 305, 320 290 C 335 275, 330 255, 305 250 C 285 245, 270 252, 265 265 Z"
+              fill={`url(#${uid}-core)`}
               stroke="rgba(255,255,255,0.4)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
+              strokeWidth="1"
             />
-            {/* Left top outer corner */}
-            <path
-              d="M 170 205 L 210 170 L 225 210 L 202 245 Z"
-              fill={`url(#${uid}-ruby-3)`}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-          </g>
 
-          {/* TOP CROWN FACETS */}
-          <g>
-            {/* Top-left crest */}
+            {/* Puntos de luz satinada en las curvas del núcleo */}
             <path
-              d="M 210 170 L 265 150 L 275 190 L 225 210 Z"
-              fill={`url(#${uid}-ruby-highlight)`}
-              stroke="rgba(255,255,255,0.5)"
-              strokeWidth="1.4"
-              strokeLinejoin="round"
-            />
-            {/* Top center apex */}
-            <path
-              d="M 265 150 L 315 162 L 325 200 L 275 190 Z"
-              fill={`url(#${uid}-ruby-2)`}
-              stroke="rgba(255,255,255,0.4)"
+              d="M 272 260 C 285 250, 315 250, 328 260"
+              fill="none"
+              stroke="rgba(255,255,255,0.55)"
               strokeWidth="1.2"
-              strokeLinejoin="round"
+              strokeLinecap="round"
             />
-            {/* Top right crown facet */}
             <path
-              d="M 315 162 L 355 185 L 348 230 L 325 200 Z"
-              fill={`url(#${uid}-ruby-1)`}
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
+              d="M 280 280 C 295 292, 315 290, 325 278"
+              fill="none"
+              stroke="rgba(255,255,255,0.45)"
+              strokeWidth="1"
+              strokeLinecap="round"
             />
-          </g>
+          </motion.g>
 
-          {/* RIGHT WING & LOWER FLANK FACETS */}
-          <g>
-            {/* Right upper wing */}
-            <path
-              d="M 355 185 L 382 235 L 350 280 L 348 230 Z"
-              fill={`url(#${uid}-ruby-3)`}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-            {/* Right lateral broad petal */}
-            <path
-              d="M 382 235 L 392 310 L 330 328 L 350 280 Z"
-              fill={`url(#${uid}-ruby-2)`}
-              stroke="rgba(255,255,255,0.4)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-            {/* Right lower wing corner */}
-            <path
-              d="M 392 310 L 365 372 L 305 348 L 330 328 Z"
-              fill={`url(#${uid}-ruby-1)`}
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-          </g>
-
-          {/* MIDDLE LAYER FACETED SPIRAL */}
-          <g>
-            {/* Lower mid-horizontal shelf petal (characteristic logo bar) */}
-            <path
-              d="M 180 300 L 290 280 L 320 325 L 210 345 Z"
-              fill={`url(#${uid}-ruby-highlight)`}
-              stroke="rgba(255,255,255,0.5)"
-              strokeWidth="1.4"
-              strokeLinejoin="round"
-            />
-            {/* Right mid wrap facet */}
-            <path
-              d="M 290 280 L 338 235 L 348 275 L 320 325 Z"
-              fill={`url(#${uid}-ruby-3)`}
-              stroke="rgba(255,255,255,0.35)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-            {/* Upper mid inner collar */}
-            <path
-              d="M 225 210 L 285 200 L 305 240 L 250 250 Z"
-              fill={`url(#${uid}-ruby-1)`}
-              stroke="rgba(255,255,255,0.4)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-            {/* Left mid inner wedge */}
-            <path
-              d="M 195 250 L 250 250 L 225 285 L 180 280 Z"
-              fill={`url(#${uid}-ruby-2)`}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-          </g>
-
-          {/* INNER CORE / SPIRAL HEART */}
-          <g>
-            {/* Core spiral wrap 1 */}
-            <path
-              d="M 245 220 L 280 215 L 295 248 L 260 255 Z"
-              fill={`url(#${uid}-ruby-core)`}
-              stroke="rgba(255,255,255,0.6)"
-              strokeWidth="1.3"
-              strokeLinejoin="round"
-            />
-            {/* Core spiral wrap 2 */}
-            <path
-              d="M 235 235 L 260 228 L 272 260 L 245 268 Z"
-              fill={`url(#${uid}-ruby-highlight)`}
-              stroke="rgba(255,255,255,0.65)"
-              strokeWidth="1.3"
-              strokeLinejoin="round"
-            />
-            {/* Central jewel diamond apex */}
-            <path
-              d="M 252 238 L 268 242 L 260 255 L 248 250 Z"
-              fill="#ffe4e6"
-              fillOpacity="0.95"
-              stroke="white"
-              strokeWidth="1.2"
-              strokeLinejoin="round"
-            />
-          </g>
-
-          {/* DYNAMIC SHIMMER SWEEP OVERLAY */}
+          {/* =================================================================== */}
+          {/* LUZ ESPECULAR DINÁMICA / REFLEJOS EN PÉTALOS (SEGUIMIENTO SUAVE)    */}
+          {/* =================================================================== */}
           {!reduce && (
             <motion.g
+              style={{
+                opacity: 0.35,
+                transformOrigin: "300px 300px",
+              }}
               animate={{
-                x: [-350, 450],
-                opacity: [0, 1, 0],
+                opacity: [0.25, 0.45, 0.25],
               }}
               transition={{
                 duration: 5,
                 repeat: Infinity,
-                repeatDelay: 2.5,
                 ease: "easeInOut",
               }}
-              className="pointer-events-none mix-blend-overlay"
+              className="pointer-events-none mix-blend-screen"
             >
-              <rect
-                x="50"
-                y="100"
-                width="160"
-                height="320"
-                transform="rotate(28 130 260)"
-                fill={`url(#${uid}-light-sweep)`}
+              <ellipse
+                cx="300"
+                cy="260"
+                rx="180"
+                ry="120"
+                fill="url(#uid-glow-light)"
+                opacity="0.3"
               />
             </motion.g>
           )}
-
-          {/* BEVEL SPECULAR ACCENTS (Delicate Crystal Edge Highlights) */}
-          <g stroke="rgba(255,255,255,0.7)" strokeWidth="1" strokeLinecap="round">
-            <line x1="210" y1="170" x2="265" y2="150" />
-            <line x1="180" y1="300" x2="290" y2="280" />
-            <line x1="140" y1="270" x2="175" y2="295" />
-            <line x1="315" y1="162" x2="355" y2="185" />
-          </g>
         </svg>
       </motion.div>
     </div>

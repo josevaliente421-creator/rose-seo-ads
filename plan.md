@@ -1,28 +1,36 @@
-# Plan de Mejora: Rosa Facetada Oficial (Logo) + Animaciones de Alta Gama
+# Rediseño Completo de la Rosa del Hero: Escultura Botánica "De Semilla a Florecimiento"
 
-Adaptación y mejora de la rosa en la landing page basada **fielmente en la geometría facetada/origami del logo oficial de Rose SEO & Ads**, transformándola en una pieza viva con facetas de cristal rubí, iluminación volumétrica interactiva, destellos dinámicos y animaciones de alta gama.
+Este documento establece la guía técnica y artística para reemplazar completamente la figura geométrica anterior por una **escultura botánica viva, orgánica y reconocible de una ROSA**, acompañada de una composición editorial de lujo.
 
-> **Regla estricta:** La carpeta `rose-prospecting/` no será tocada bajo ninguna circunstancia.
-
----
-
-## 1. Concepto: La Rosa del Logo en Cristal Rubí Dinámico
-- **Fidelidad Geométrica**: Vectorización y modelado de las facetas angulares del logo oficial (capas exteriores, intermedias y núcleo en espiral facetado).
-- **Estética Faceted Ruby Glass**: Gradientes de profundidad por faceta (carmesí profundo `#4a1025`, rubí vibrante `#96294a`, cuarzo rosa `#e2688f`), biseles refractivos y reflejos cáusticos.
-- **Interactividad y Dinamismo**:
-  - **Light Sweep (Destello Especular)**: Barrido de luz que ilumina las aristas como un diamante/rubí.
-  - **Mouse-Interactive Tilt**: Reacción suave al movimiento del ratón con cambio de sombras y brillos.
-  - **Breathing / Flotación**: Pulsación orgánica suave y micro-destellos de partículas de luz circundantes.
+> **Regla de seguridad:** La carpeta `rose-prospecting/` queda estrictamente intacta.
 
 ---
 
-## 2. Aplicación en Hero y CTA
-- **Hero (`hero.tsx`)**: Rosa facetada con presencia central, halo ambiental, parallax reactivo al cursor y tarjetas flotantes de cristal.
-- **CTA Final (`cta.tsx`)**: Rosa facetada con pulso lumínico radiante que guía visualmente a los botones de contacto (WhatsApp y llamada).
+## 1. Concepto Artístico
+- **Rosa Botánica Esculpida**:
+  - Forma orgánica 100% reconocible como una rosa real: pétalos de curvas suaves y sensuales, cáliz central en espiral áurea, pétalos envolventes superpuestos y bordes ondulados.
+  - Acabado entre escultura de diseño satinada, terciopelo botánico y cristal translúcido suave.
+  - Paleta oficial: `#4A1025` (sombra/cáliz), `#7A1F3D` (cuerpo principal), `#96294A` / `#B83A60` (iluminación). Cero neón, cero azul o degradados genéricos de IA.
 
 ---
 
-## 3. Animaciones Globales
-- Transiciones cinemáticas con curvas Bézier premium (`[0.16, 1, 0.3, 1]`).
-- Brillos y shimmers en tarjetas interactivas de toda la página.
-- 60 FPS garantizados y compatibilidad con `prefers-reduced-motion`.
+## 2. Animación "De Semilla a Florecimiento"
+- **Entrada (2.5 a 3.5 segundos)**:
+  - Fase 1: Semilla / capullo central.
+  - Fase 2: Desenroscado del corazón floral.
+  - Fase 3: Despliegue progresivo de los pétalos intermedios.
+  - Fase 4: Apertura majestuosa de los pétalos exteriores de guarda.
+- **Estado vivo continuo**: Micro-respiración orgánica, rotación e inclinación ultra lenta y variación lumínica sutil.
+- **Mouse Parallax**: Reacción al cursor suave y limitada con física de resorte.
+- **Scroll Storytelling**: Sincronización con el scroll a lo largo de la narrativa de la landing.
+
+---
+
+## 3. Composición Editorial en el Hero
+- **Eliminación total** de las tarjetas blancas flotantes tipo SaaS con métricas inventadas.
+- **Anotaciones editoriales minimalistas**: Etiquetas de tipografía refinada conectadas mediante líneas capilares ultra-finas (`0.8px`):
+  - `01` · DISEÑO A MEDIDA
+  - `02` · ENTREGA EN 7 DÍAS
+  - `03` · SEO ESTRUCTURAL
+  - `04` · CONVERSIÓN & VELOCIDAD
+- Mucho espacio negativo y dirección de arte estilo Apple / Awwwards.
