@@ -1,166 +1,152 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
-import { cn } from "@/lib/utils";
+import { useId } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 type GlassRoseProps = {
   className?: string;
-  variant?: "hero" | "cta" | "compact";
-  interactive?: boolean;
 };
 
-export function GlassRose({
-  className,
-  variant = "hero",
-  interactive = true,
-}: GlassRoseProps) {
+export function GlassRose({ className }: GlassRoseProps) {
+  const uid = useId().replace(/[:]/g, "");
   const reduce = useReducedMotion();
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Mouse tracking for subtle 3D tilt
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { stiffness: 60, damping: 20, mass: 0.7 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
-
-  const rotateX = useTransform(smoothY, [-0.5, 0.5], [8, -8]);
-  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-8, 8]);
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!interactive || reduce || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-  }
-
-  function handleMouseLeave() {
-    mouseX.set(0);
-    mouseY.set(0);
-  }
+  const petals = [
+    { layer: 0, count: 6, r: 88, w: 58, h: 88, op: 0.5, rotate: 0 },
+    { layer: 1, count: 7, r: 62, w: 50, h: 76, op: 0.62, rotate: 26 },
+    { layer: 2, count: 6, r: 42, w: 42, h: 64, op: 0.74, rotate: 10 },
+    { layer: 3, count: 5, r: 24, w: 34, h: 46, op: 0.86, rotate: 36 },
+    { layer: 4, count: 4, r: 10, w: 24, h: 32, op: 0.95, rotate: 20 },
+  ];
 
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={cn(
-        "relative flex items-center justify-center select-none perspective-[1200px]",
-        className
-      )}
-      role="img"
-      aria-label="Escultura botánica de rosa en 3D de alta gama, símbolo de Rose SEO & Ads"
-    >
-      {/* Ambient Volumetric Backlight */}
-      <motion.div
+    <div className={className} role="img" aria-label="Rosa de vidrio, símbolo de la marca Rose SEO & Ads">
+      <motion.svg
+        viewBox="-185 -185 370 350"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         aria-hidden
         animate={
           reduce
             ? undefined
             : {
-                scale: [1, 1.08, 1],
-                opacity: variant === "cta" ? [0.45, 0.75, 0.45] : [0.35, 0.6, 0.35],
-              }
-        }
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="pointer-events-none absolute inset-[-10%] -z-10 rounded-full bg-gradient-to-tr from-brand-dark/30 via-brand/25 to-rose-300/20 blur-[70px] dark:from-brand-dark/50 dark:via-brand/35 dark:to-rose-400/25"
-      />
-
-      {/* Delicate Luminous Orbital Rings */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-2 rounded-full border border-brand/15 dark:border-rose-400/20 opacity-80"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-10 rounded-full border border-dashed border-brand/10 dark:border-rose-400/10 opacity-60 animate-spin"
-        style={{ animationDuration: "90s" }}
-      />
-
-      {/* Floating Petal Particles */}
-      {!reduce && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-5 overflow-visible">
-          {[
-            { top: "8%", left: "14%", delay: 0, size: "h-2 w-2" },
-            { top: "24%", right: "12%", delay: 1.5, size: "h-2.5 w-2.5" },
-            { bottom: "22%", left: "12%", delay: 3, size: "h-2 w-2" },
-            { bottom: "14%", right: "18%", delay: 2.2, size: "h-3 w-3" },
-            { top: "45%", left: "4%", delay: 4, size: "h-1.5 w-1.5" },
-            { top: "35%", right: "6%", delay: 2.8, size: "h-2 w-2" },
-          ].map((sparkle, idx) => (
-            <motion.span
-              key={idx}
-              style={{
-                top: sparkle.top,
-                left: sparkle.left,
-                right: sparkle.right,
-                bottom: sparkle.bottom,
-              }}
-              animate={{
-                y: [0, -16, 0],
-                opacity: [0.1, 0.7, 0.1],
-                scale: [0.7, 1.1, 0.7],
-              }}
-              transition={{
-                duration: 5,
-                delay: sparkle.delay,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className={cn(
-                "absolute rounded-full bg-brand/40 shadow-[0_0_12px_rgba(226,104,143,0.8)] dark:bg-rose-300/50",
-                sparkle.size
-              )}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* 3D Tilted Rose Image Container */}
-      <motion.div
-        style={
-          interactive && !reduce
-            ? {
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-              }
-            : undefined
-        }
-        animate={
-          reduce
-            ? undefined
-            : {
-                y: [0, -9, 0],
-                scale: [1, 1.018, 1],
+                y: [0, -14, 0],
+                rotate: [-3.5, 3.5, -3.5],
               }
         }
         transition={{
-          y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-          scale: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+          y: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 16, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="relative h-full w-full flex items-center justify-center will-change-transform"
+        className="h-full w-full"
       >
-        <Image
-          src="/hero-rose.png"
-          alt="Rosa botánica esculpida en 3D para Rose SEO & Ads"
-          width={700}
-          height={700}
-          priority
-          className="h-full w-full object-contain drop-shadow-[0_25px_50px_rgba(74,16,37,0.28)] dark:drop-shadow-[0_30px_60px_rgba(226,104,143,0.3)] transition-transform duration-500 hover:scale-[1.03]"
+        <defs>
+          <radialGradient id={`${uid}-bg`} cx="50%" cy="42%" r="60%">
+            <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.16" />
+            <stop offset="55%" stopColor="var(--brand)" stopOpacity="0.07" />
+            <stop offset="100%" stopColor="var(--brand)" stopOpacity="0" />
+          </radialGradient>
+
+          <linearGradient id={`${uid}-petal`} x1="0" y1="0" x2="0.25" y2="1">
+            <stop offset="0%" stopColor="#b05273" stopOpacity="0.9" />
+            <stop offset="45%" stopColor="#7a1f3d" stopOpacity="0.82" />
+            <stop offset="100%" stopColor="#4a1025" stopOpacity="0.78" />
+          </linearGradient>
+
+          <linearGradient id={`${uid}-petalInner`} x1="0" y1="0" x2="0.3" y2="1">
+            <stop offset="0%" stopColor="#c47e97" stopOpacity="0.95" />
+            <stop offset="50%" stopColor="#96294a" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#4a1025" stopOpacity="0.85" />
+          </linearGradient>
+
+          <linearGradient id={`${uid}-stem`} x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stopColor="#3f5d42" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#6d8f70" stopOpacity="0.85" />
+          </linearGradient>
+
+          <linearGradient id={`${uid}-leaf`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#7d9c7f" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#3f5d42" stopOpacity="0.6" />
+          </linearGradient>
+
+          <linearGradient id={`${uid}-shine`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+
+          <radialGradient id={`${uid}-glow`} cx="38%" cy="32%" r="50%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
+
+          <filter id={`${uid}-blur`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" />
+          </filter>
+        </defs>
+
+        <circle cx="0" cy="-40" r="118" fill={`url(#${uid}-bg)`} />
+
+        <g stroke="rgba(255,255,255,0.28)" strokeWidth="0.9">
+          {petals.map((layer, li) =>
+            Array.from({ length: layer.count }).map((_, i) => {
+              const angle = (360 / layer.count) * i + layer.rotate;
+              return (
+                <path
+                  key={`${li}-${i}`}
+                  d={`M 0 0 C ${layer.w * 0.42} ${-layer.h * 0.28}, ${
+                    layer.w * 0.42
+                  } ${-layer.h * 0.72}, 0 ${-layer.h} C ${-layer.w * 0.42} ${
+                    -layer.h * 0.72
+                  }, ${-layer.w * 0.42} ${-layer.h * 0.28}, 0 0 Z`}
+                  fill={
+                    li >= 3 ? `url(#${uid}-petalInner)` : `url(#${uid}-petal)`
+                  }
+                  fillOpacity={layer.op}
+                  transform={`rotate(${angle} 0 0) translate(0 ${-layer.r})`}
+                />
+              );
+            }),
+          )}
+
+          <path
+            d="M 0 0 C 2.5 -20, 2.5 -34, 0 -42 C -2.5 -34, -2.5 -20, 0 0 Z"
+            fill="#4a1025"
+            fillOpacity="0.9"
+          />
+        </g>
+
+        <motion.g
+          animate={reduce ? undefined : { opacity: [0.35, 0.9, 0.35] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ellipse
+            cx="-34"
+            cy="-86"
+            rx="26"
+            ry="40"
+            transform="rotate(24 -34 -86)"
+            fill={`url(#${uid}-glow)`}
+            filter={`url(#${uid}-blur)`}
+          />
+          <path
+            d="M -52 -118 C -30 -128, -12 -120, -4 -102 C -26 -104, -44 -112, -52 -118 Z"
+            fill={`url(#${uid}-shine)`}
+          />
+        </motion.g>
+
+        <path
+          d="M 0 0 C 3 34, 3 62, 0 86"
+          stroke={`url(#${uid}-stem)`}
+          strokeWidth="7"
+          strokeLinecap="round"
         />
-      </motion.div>
+        <path
+          d="M 0 44 C 20 46, 36 40, 48 26 C 44 46, 30 56, 0 54 Z"
+          fill={`url(#${uid}-leaf)`}
+          stroke="rgba(255,255,255,0.2)"
+          strokeWidth="0.8"
+        />
+      </motion.svg>
     </div>
   );
 }

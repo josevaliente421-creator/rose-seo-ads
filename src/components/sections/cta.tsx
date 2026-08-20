@@ -22,13 +22,12 @@ export function Cta() {
             <div className="bg-noise pointer-events-none absolute inset-0 opacity-30" />
 
             <div className="relative flex flex-col items-center">
-              <div className="relative mx-auto flex h-44 w-44 items-center justify-center sm:h-52 sm:w-52">
+              <div className="pointer-events-none relative mx-auto flex h-36 w-36 items-center justify-center opacity-90 sm:h-44 sm:w-44">
                 <div
                   aria-hidden
-                  className="absolute inset-0 -z-10 rounded-full bg-gradient-to-tr from-brand/35 via-brand-dark/30 to-rose-400/20 blur-3xl animate-pulse"
-                  style={{ animationDuration: "6s" }}
+                  className="absolute inset-0 rounded-full bg-gradient-to-b from-brand/20 to-transparent blur-2xl"
                 />
-                <GlassRose className="h-full w-full" variant="cta" interactive={true} />
+                <GlassRose className="h-full w-full" />
               </div>
 
               <h2 className="mt-6 max-w-3xl font-display text-4xl font-bold tracking-tight text-balance sm:text-6xl">

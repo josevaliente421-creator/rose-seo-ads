@@ -34,7 +34,8 @@ yarn-error.log*
 .env*
 
 # vercel
-.vercel
+# local tools
+rose-prospecting/
 
 # typescript
 *.tsbuildinfo
